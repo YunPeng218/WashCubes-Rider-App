@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+import 'package:washcube_rider_app/src/constants/colors.dart';
+import 'package:washcube_rider_app/src/constants/sizes.dart';
+import 'package:washcube_rider_app/src/features/screens/login/login_screen.dart';
+import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
+
+class PasswordUpdatedScreen extends StatelessWidget {
+  const PasswordUpdatedScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(cDefaultSize),
+        child: Center(
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              const Icon(Icons.check_circle_rounded,
+                  color: AppColors.cBlueColor3, size: 100),
+              Text(
+                'Password Updated!',
+                style: CTextTheme.blackTextTheme.displaySmall,
+                textAlign: TextAlign.center,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
+                    );
+                  },
+                  child: Text('Continue', style: CTextTheme.blackTextTheme.headlineMedium,)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
