@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'locker_qr_screen.dart';
-import 'identitycard_qr_screen.dart';
+import 'package:washcube_rider_app/lockersite_screen/identitycard_qr_screen.dart';
 import 'scan_tag_screen.dart';
 
-class DonePickupScreen extends StatefulWidget {
-  const DonePickupScreen({Key? key}) : super(key: key);
+class PickupLaundrySiteScreen extends StatefulWidget {
+  const PickupLaundrySiteScreen({Key? key}) : super(key: key);
 
   @override
-  _DonePickupScreenState createState() => _DonePickupScreenState();
+  _PickupLaundrySiteScreenState createState() => _PickupLaundrySiteScreenState();
 }
 
-class _DonePickupScreenState extends State<DonePickupScreen> {
+class _PickupLaundrySiteScreenState extends State<PickupLaundrySiteScreen> {
   bool isCompleted = false;
- // State to track if the item has been picked up
 
   void showHelpDialog(BuildContext context) {
     showDialog(
@@ -25,7 +23,7 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
             TextButton(
               child: const Text('Contact Admin Hotline'),
               onPressed: () {
-                // TODO: Implement the functionality to contact the admin hotline
+                // Implement the functionality to contact the admin hotline.
               },
             ),
             TextButton(
@@ -43,33 +41,21 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          SizedBox(height: 50),
-          SizedBox(height: MediaQuery.of(context).padding.top * 0.05), // Space for status bar
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 50),
+            SizedBox(height: MediaQuery.of(context).padding.top * 0.05), // Space for status bar
           Container(
             padding: const EdgeInsets.all(16.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Icons on the left
                 Column(
                   children: <Widget>[
                     const SizedBox(height: 30),
                     Row(
                       children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => LockerQRScreen()), 
-                            );
-                          },
-                          child: CircleAvatar(
-                            backgroundColor: Color.fromRGBO(215, 236, 247, 1),
-                            child: Icon(Icons.kitchen, color: Colors.black),
-                          ),
-                        ),
                         SizedBox(width: 8),
                         GestureDetector(
                           onTap: () {
@@ -78,7 +64,7 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
                               MaterialPageRoute(builder: (context) => IdentityCardQRScreen()), 
                             );
                           },
-                          child: CircleAvatar(
+                          child: const CircleAvatar(
                             backgroundColor: Color.fromRGBO(215, 236, 247, 1),
                             child: Icon(Icons.contacts, color: Colors.black),
                           ),
@@ -86,14 +72,14 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
                       ],
                     ),
                     const SizedBox(height: 25),
-                    Text(
-                      'Order: #9612',
+                    const Text(
+                      'Laundry Centre',
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
                       ),
                     ),
-                    Text(
+                    const Text(
                       '1 • Pick Up',
                       style: TextStyle(
                         color: Color(0xFF438FF7),
@@ -107,7 +93,7 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
                         backgroundColor: Color.fromRGBO(215, 236, 247, 1),
                       ),
                       onPressed: () => showHelpDialog(context),
-                      child: Text(
+                      child: const Text(
                         'Help',
                         style: TextStyle(color: Colors.black),
                       ),
@@ -115,22 +101,19 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
                   ],
                 ),
                 const SizedBox(width: 16),
-                // Placeholder for the image on the right
                 Expanded(
                   child: SizedBox(
-                    width: 100, // Specify the desired width
-                    height: 200, // Specify the desired height
+                    width: 100,
+                    height: 200,
                     child: Image.asset(
                       'assets/images/map01.png',
-                      // fit: BoxFit.cover,
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          // Container 2
-          ListTile(
+          const ListTile(
             title: Text(
               'Location',
               style: TextStyle(
@@ -140,85 +123,83 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
               ),
             ),
             subtitle: Text(
-              'Sunway Geo Residences',
+              'Sunway Geo Doby Shop',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           ListTile(
-            title: Text(
-              'Street',
+            title: const Text(
+              'Item Qty',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.grey,
-                fontSize: 18,
               ),
             ),
-            subtitle: Text(
-              'Persiaran Tasik Timur, Sunway South Quay, Bandar Sunway, 47500 Subang Jaya, Selangor',
+            subtitle: const Text(
+              '3 Item(s)',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           const Divider(),
-          ListTile(
-            leading: Container(
-              child: const Icon(Icons.check, color: Colors.black),
-            ),
-            title: Text(
-              'Apply Tag',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            trailing: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.blue,
-              ),
-              onPressed: () {
-                // TODO: Implement the functionality when the "DONE" button is pressed
-              },
-              child: const Text('DONE', style: TextStyle(color: Colors.white)),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Uploaded on 23 Nov 2023, 22:03',
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
-          ),
-          const Divider(),
-           SizedBox(height: 150), 
-                       ElevatedButton(
+            _buildScanItem(context, 'Item #1911109579612'),
+            _buildScanItem(context, 'Item #1911109579625'),
+            _buildScanItem(context, 'Item #1215020113224'),
+            // Add more items as needed
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            foregroundColor: isCompleted ? Colors.white : Colors.black, backgroundColor: isCompleted ? Colors.blue : Colors.white,
-            side: BorderSide(color: Colors.blue),
+            foregroundColor: Colors.white, backgroundColor: isCompleted ? Colors.green : Colors.blue, // Text color
           ),
           onPressed: () {
             setState(() {
-              // Toggle the completion status
               isCompleted = !isCompleted;
             });
           },
-          child: Text(
-            isCompleted ? 'Completed' : 'Picked Up',
-            style: TextStyle(
-              color: isCompleted ? Colors.white : Colors.black,
-            ),
+          child: Text(isCompleted ? 'Completed' : 'Picked Up'),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildScanItem(BuildContext context, String tagNumber) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 6,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: ListTile(
+        leading: Icon(Icons.qr_code_scanner, color: Colors.black),
+        title: Text(
+          tagNumber,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
           ),
         ),
-
-        ],
+        trailing: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.red,
+            backgroundColor: Color.fromRGBO(215, 236, 247, 1),
+          ),
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ScanTagScreen())),
+          child: const Text('SCAN'),
+        ),
       ),
     );
   }

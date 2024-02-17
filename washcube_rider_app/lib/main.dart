@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pickup_locker_screen.dart';
+import 'lockersite_screen/pickup_locker_screen.dart';
 
 void main() {
   runApp(const MyApp());
