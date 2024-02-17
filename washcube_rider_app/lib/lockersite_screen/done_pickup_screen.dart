@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'locker_qr_screen.dart';
 import 'identitycard_qr_screen.dart';
-import 'scan_tag_screen.dart';
-import'package:washcube_rider_app/laundrysite_screen/pickup_laundrysite_screen.dart';
 
 class DonePickupScreen extends StatefulWidget {
   const DonePickupScreen({Key? key}) : super(key: key);
@@ -63,7 +61,7 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => PickupLaundrySiteScreen()), 
+                              MaterialPageRoute(builder: (context) => LockerQRScreen()), 
                             );
                           },
                           child: CircleAvatar(
