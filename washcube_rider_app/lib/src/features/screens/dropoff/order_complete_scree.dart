@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
-import 'package:washcube_rider_app/src/features/screens/login/login_screen.dart';
+import 'package:washcube_rider_app/src/features/screens/homepage/homepage.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 
-class PasswordUpdatedScreen extends StatelessWidget {
-  const PasswordUpdatedScreen({super.key});
+class OrderCompleteScreen extends StatefulWidget {
+  const OrderCompleteScreen({super.key});
 
+  @override
+  State<OrderCompleteScreen> createState() => _OrderCompleteScreenState();
+}
+
+class _OrderCompleteScreenState extends State<OrderCompleteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,24 +23,19 @@ class PasswordUpdatedScreen extends StatelessWidget {
             children: [
               Image.asset(cDoubleCheckmark),
               Text(
-                'Password Updated!',
+                'Order #00000000 Completed!',
                 style: CTextTheme.blackTextTheme.displaySmall,
                 textAlign: TextAlign.center,
               ),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()),
-                    );
                     Navigator.pushAndRemoveUntil(
                       context, 
-                      MaterialPageRoute(builder: (context) => const LoginScreen()), 
+                      MaterialPageRoute(builder: (context) => const HomePage()), 
                       (route) => false
                     );
                   },
-                  child: Text('Continue', style: CTextTheme.blackTextTheme.headlineMedium,)),
+                  child: Text('Back To Home', style: CTextTheme.blackTextTheme.headlineMedium,)),
             ],
           ),
         ),
