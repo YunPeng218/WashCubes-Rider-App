@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:washcube_rider_app/src/common_widgets/help_widget.dart';
+import 'package:washcube_rider_app/src/common_widgets/barcode_scan_widget.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
 import 'package:washcube_rider_app/src/features/screens/dropoff/order_complete_scree.dart';
+import 'package:washcube_rider_app/src/features/screens/id_rider/id_verification_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/textfield_theme.dart';
 
@@ -17,9 +20,9 @@ class DropOffLaundryCenterScreen extends StatefulWidget {
 class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen> {
   // Item List Data
   final List<Map<String, dynamic>> items = [
-    {'number': '#1911109579612', 'scan': 'Scan', 'description': 'Scan to attached info'},
-    {'number': '#1911109579625', 'scan': 'Scan', 'description': 'Scan to attached info'},
-    {'number': '#1215020113224', 'scan': 'Scan', 'description': 'Scan to attached info'},
+    {'number': '#1911109579612', 'scan': 'Scan', 'description': 'Scan to attached info', 'scanned': false,},
+    {'number': '#1911109579625', 'scan': 'Scan', 'description': 'Scan to attached info', 'scanned': false,},
+    {'number': '#1215020113224', 'scan': 'Scan', 'description': 'Scan to attached info', 'scanned': false,},
   ];
   TextEditingController nameController = TextEditingController();
   bool isNotValidateName = false;
@@ -27,6 +30,13 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
   TextEditingController icController = TextEditingController();
   bool isNotValidateIC = false;
   String errorTextIC = '';
+
+  // Handle barcode scan result
+  void _handleScanResult(int index, String result) {
+    setState(() {
+      items[index]['scanned'] = true;
+    });
+  }
 
   //Name Validation Function
   void namevalidation() async {
@@ -74,7 +84,12 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
         actions: [
           //Rider ID QR Code Button
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const IDVerificationScreen()),
+              );
+            },
             child: const Icon(Icons.badge_outlined,color: AppColors.cBlackColor,)
           ),
         ],
@@ -103,12 +118,21 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
               ],
             ),
             const SizedBox(height: 10.0),
+
             //Help Button
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const HelpWidget();
+                  },
+                );
+              },
               child: Text('Help', style: CTextTheme.blackTextTheme.headlineMedium,)
             ),
             const SizedBox(height: 10.0),
+
             //Item Count Title
             Row(
               children: [
@@ -119,6 +143,7 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
             ),
             const SizedBox(height: 20.0),
             const Divider(),
+
             //Task List
             ListView.builder(
               shrinkWrap: true,
@@ -130,9 +155,10 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
                   leading: const Icon(Icons.qr_code_scanner_rounded, color: Colors.blue), //Left Icon
                   title: Text(item['number'], style: CTextTheme.blackTextTheme.headlineLarge,), //Order Number
                   //Scan Action Button
-                  trailing: TextButton(
-                    child: Text(item['scan'], style: const TextStyle(color: Colors.red),),
-                    onPressed: () {},
+                  //Call for Barcode Scanner Widget
+                  trailing: BarcodeScannerWidget(
+                    isScanning: item['scanned'],
+                    onScanResult: (result) => _handleScanResult(index, result),
                   ),
                   subtitle: Text(item['description'], style: CTextTheme.greyTextTheme.headlineSmall,),
                   contentPadding: const EdgeInsets.all(10),
