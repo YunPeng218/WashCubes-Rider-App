@@ -53,9 +53,10 @@ class _LoginScreenState extends State<LoginScreen> {
     // RegExp pattern = RegExp(
     //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
     if (passwordController.text.isNotEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+      Navigator.pushAndRemoveUntil(
+        context, 
+        MaterialPageRoute(builder: (context) => const HomePage()), 
+        (route) => false
       );
       // if (pattern.hasMatch(passwordController.text)) {
       //   // Navigator.push(
