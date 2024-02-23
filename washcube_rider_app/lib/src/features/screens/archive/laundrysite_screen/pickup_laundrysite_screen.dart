@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:washcube_rider_app/src/features/screen/lockersite_screen/identitycard_qr_screen.dart';
+import 'package:washcube_rider_app/src/features/screens/id_rider/id_verification_screen.dart';
 import 'scan_tag_screen.dart';
 
 class PickupLaundrySiteScreen extends StatefulWidget {
-  const PickupLaundrySiteScreen({Key? key}) : super(key: key);
+  const PickupLaundrySiteScreen({super.key});
 
   @override
   _PickupLaundrySiteScreenState createState() => _PickupLaundrySiteScreenState();
@@ -44,7 +44,7 @@ class _PickupLaundrySiteScreenState extends State<PickupLaundrySiteScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            SizedBox(height: 50),
+            const SizedBox(height: 50),
             SizedBox(height: MediaQuery.of(context).padding.top * 0.05), // Space for status bar
           Container(
             padding: const EdgeInsets.all(16.0),
@@ -56,12 +56,12 @@ class _PickupLaundrySiteScreenState extends State<PickupLaundrySiteScreen> {
                     const SizedBox(height: 30),
                     Row(
                       children: <Widget>[
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => IdentityCardQRScreen()), 
+                              MaterialPageRoute(builder: (context) => const IDVerificationScreen()), 
                             );
                           },
                           child: const CircleAvatar(
@@ -90,7 +90,7 @@ class _PickupLaundrySiteScreenState extends State<PickupLaundrySiteScreen> {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(215, 236, 247, 1),
+                        backgroundColor: const Color.fromRGBO(215, 236, 247, 1),
                       ),
                       onPressed: () => showHelpDialog(context),
                       child: const Text(
@@ -129,15 +129,15 @@ class _PickupLaundrySiteScreenState extends State<PickupLaundrySiteScreen> {
               ),
             ),
           ),
-          ListTile(
-            title: const Text(
+          const ListTile(
+            title: Text(
               'Item Qty',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.grey,
               ),
             ),
-            subtitle: const Text(
+            subtitle: Text(
               '3 Item(s)',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -185,19 +185,19 @@ class _PickupLaundrySiteScreenState extends State<PickupLaundrySiteScreen> {
         ],
       ),
       child: ListTile(
-        leading: Icon(Icons.qr_code_scanner, color: Colors.black),
+        leading: const Icon(Icons.qr_code_scanner, color: Colors.black),
         title: Text(
           tagNumber,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
         trailing: ElevatedButton(
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.red,
-            backgroundColor: Color.fromRGBO(215, 236, 247, 1),
+            backgroundColor: const Color.fromRGBO(215, 236, 247, 1),
           ),
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ScanTagScreen())),
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ScanTagScreen())),
           child: const Text('SCAN'),
         ),
       ),

@@ -1,32 +1,34 @@
 import 'package:flutter/material.dart';
 
 class ScanTagScreen extends StatelessWidget {
+  const ScanTagScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan'),
+        title: const Text('Scan'),
         leading: GestureDetector(
         onTap: () {
           
             Navigator.pop(context);
           },
-          child: Icon(Icons.arrow_back),
+          child: const Icon(Icons.arrow_back),
         ),
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16), 
+        margin: const EdgeInsets.symmetric(horizontal: 16), 
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-             SizedBox(height: 40), 
-            Text(
+             const SizedBox(height: 40), 
+            const Text(
               'Scan the Barcode',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Line up the barcode inside the blue corner & keep the phone steady!',
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
@@ -42,7 +44,7 @@ class ScanTagScreen extends StatelessWidget {
               size: 24,
               color: Theme.of(context).primaryColor,
             ),
-            SizedBox(height: 8), 
+            const SizedBox(height: 8), 
             Text(
               'Tap to turn light on',
               style: TextStyle(
@@ -51,7 +53,7 @@ class ScanTagScreen extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-             SizedBox(height: 20), 
+             const SizedBox(height: 20), 
           ],
         ),
       ),

@@ -3,6 +3,8 @@ import 'package:washcube_rider_app/src/constants/sizes.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 
 class LockerQRScreen extends StatelessWidget {
+  const LockerQRScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

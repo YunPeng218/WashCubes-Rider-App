@@ -16,16 +16,16 @@ class IDVerificationScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.all(cDefaultSize),
+        padding: const EdgeInsets.all(cDefaultSize),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               //TODO: Place Generated Rider QR Here
               Image.asset(cQRCode),
-              SizedBox(height: cDefaultSize,),
+              const SizedBox(height: cDefaultSize,),
               //TODO: Place Rider PFP From Database to Here
-              CircleAvatar(child: Image.asset(cRiderPFP),radius: cDefaultSize * 2,),
+              CircleAvatar(radius: cDefaultSize * 2,child: Image.asset(cRiderPFP),),
               Text('Darren Lee', style: CTextTheme.blackTextTheme.displaySmall,),
             ],
           ),

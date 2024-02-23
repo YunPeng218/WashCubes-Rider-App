@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 class ScanTagScreen extends StatefulWidget {
+  const ScanTagScreen({super.key});
+
   @override
   _ScanTagScreenState createState() => _ScanTagScreenState();
 }
@@ -34,9 +36,9 @@ class _ScanTagScreenState extends State<ScanTagScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan'),
+        title: const Text('Scan'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -45,7 +47,7 @@ class _ScanTagScreenState extends State<ScanTagScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Padding(
+          const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'Scan the Barcode',
@@ -53,7 +55,7 @@ class _ScanTagScreenState extends State<ScanTagScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(16),
             child: Text(
               'Line up the barcode inside the blue corner & keep the phone steady!',
@@ -69,7 +71,7 @@ class _ScanTagScreenState extends State<ScanTagScreen> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: InkWell(
               onTap: () => scanBarcode(),
               child: Text(

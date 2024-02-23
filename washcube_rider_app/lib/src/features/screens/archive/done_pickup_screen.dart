@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import '../locker_qr/locker_qr_screen.dart';
-import 'identitycard_qr_screen.dart';
 
 class DonePickupScreen extends StatefulWidget {
-  const DonePickupScreen({Key? key}) : super(key: key);
+  const DonePickupScreen({super.key});
 
   @override
   _DonePickupScreenState createState() => _DonePickupScreenState();
@@ -44,7 +43,7 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          SizedBox(height: 50),
+          const SizedBox(height: 50),
           SizedBox(height: MediaQuery.of(context).padding.top * 0.05), // Space for status bar
           Container(
             padding: const EdgeInsets.all(16.0),
@@ -61,23 +60,23 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => LockerQRScreen()), 
+                              MaterialPageRoute(builder: (context) => const LockerQRScreen()), 
                             );
                           },
-                          child: CircleAvatar(
+                          child: const CircleAvatar(
                             backgroundColor: Color.fromRGBO(215, 236, 247, 1),
                             child: Icon(Icons.kitchen, color: Colors.black),
                           ),
                         ),
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => IdentityCardQRScreen()), 
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(builder: (context) => IdentityCardQRScreen()), 
+                            // );
                           },
-                          child: CircleAvatar(
+                          child: const CircleAvatar(
                             backgroundColor: Color.fromRGBO(215, 236, 247, 1),
                             child: Icon(Icons.contacts, color: Colors.black),
                           ),
@@ -85,14 +84,14 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
                       ],
                     ),
                     const SizedBox(height: 25),
-                    Text(
+                    const Text(
                       'Order: #9612',
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 12,
                       ),
                     ),
-                    Text(
+                    const Text(
                       '1 • Pick Up',
                       style: TextStyle(
                         color: Color(0xFF438FF7),
@@ -103,10 +102,10 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(215, 236, 247, 1),
+                        backgroundColor: const Color.fromRGBO(215, 236, 247, 1),
                       ),
                       onPressed: () => showHelpDialog(context),
-                      child: Text(
+                      child: const Text(
                         'Help',
                         style: TextStyle(color: Colors.black),
                       ),
@@ -129,7 +128,7 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
             ),
           ),
           // Container 2
-          ListTile(
+          const ListTile(
             title: Text(
               'Location',
               style: TextStyle(
@@ -145,7 +144,7 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
               ),
             ),
           ),
-          ListTile(
+          const ListTile(
             title: Text(
               'Street',
               style: TextStyle(
@@ -166,7 +165,7 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
             leading: Container(
               child: const Icon(Icons.check, color: Colors.black),
             ),
-            title: Text(
+            title: const Text(
               'Apply Tag',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -183,10 +182,10 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
               child: const Text('DONE', style: TextStyle(color: Colors.white)),
             ),
           ),
-          Align(
+          const Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'Uploaded on 23 Nov 2023, 22:03',
                 style: TextStyle(
@@ -197,11 +196,11 @@ class _DonePickupScreenState extends State<DonePickupScreen> {
             ),
           ),
           const Divider(),
-           SizedBox(height: 150), 
+           const SizedBox(height: 150), 
                        ElevatedButton(
           style: ElevatedButton.styleFrom(
             foregroundColor: isCompleted ? Colors.white : Colors.black, backgroundColor: isCompleted ? Colors.blue : Colors.white,
-            side: BorderSide(color: Colors.blue),
+            side: const BorderSide(color: Colors.blue),
           ),
           onPressed: () {
             setState(() {

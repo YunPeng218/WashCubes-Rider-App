@@ -24,11 +24,6 @@ class PasswordUpdatedScreen extends StatelessWidget {
               ),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()),
-                    );
                     Navigator.pushAndRemoveUntil(
                       context, 
                       MaterialPageRoute(builder: (context) => const LoginScreen()), 
