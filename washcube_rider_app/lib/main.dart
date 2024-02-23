@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'lockersite_screen/pickup_locker_screen.dart';
+import 'package:washcube_rider_app/src/features/screen/homepage/homepage.dart';
+import 'package:washcube_rider_app/src/utilities/theme/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,12 +12,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: CAppTheme.lightTheme,
       title: 'Locker App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const PickupLocker(), 
+      home: const HomePage(), 
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:washcube_rider_app/lockersite_screen/identitycard_qr_screen.dart';
+import 'package:washcube_rider_app/src/features/screen/lockersite_screen/identitycard_qr_screen.dart';
 import 'scan_tag_screen.dart';
 
 class PickupLaundrySiteScreen extends StatefulWidget {
