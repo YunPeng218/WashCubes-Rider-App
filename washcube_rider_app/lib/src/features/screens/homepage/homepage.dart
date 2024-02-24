@@ -7,6 +7,8 @@ import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart
 import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/pickup_locker_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 
+import '../pickup_laundrysite/pickup_laundrysite_screen.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -99,7 +101,15 @@ class _HomePageState extends State<HomePage> {
               },
               child: const Text('drop off @ laundrysite',),
             ),
-
+            OutlinedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PickupCentre()),
+                );
+              },
+              child: const Text('pickupfromcentre',),
+            ),
             //TODO: Test Purpose Accept Job Bottom Modal
             OutlinedButton(
               onPressed: () {
