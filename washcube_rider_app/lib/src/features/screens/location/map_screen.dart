@@ -1,52 +1,79 @@
-// import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:location/location.dart';
-//
-// class MapScreen extends StatefulWidget {
-//   const MapScreen({super.key});
-//
-//   @override
-//   _MapScreenState createState() => _MapScreenState();
-// }
-//
-// class _MapScreenState extends State<MapScreen> {
-//   final Map<String, Marker> _markers = {};
-//   late GoogleMapController _mapController;
-//   final Location _location = Location();
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _location.onLocationChanged.listen((LocationData currentLocation) {
-//       // Update map with current location
-//       _mapController.animateCamera(
-//         CameraUpdate.newLatLng(LatLng(currentLocation.latitude!, currentLocation.longitude!)),
-//       );
-//     });
-//   }
-//
-//   void _onMapCreated(GoogleMapController controller) {
-//     _mapController = controller;
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Google Map Navigation')),
-//       body: GoogleMap(
-//         onMapCreated: _onMapCreated,
-//         initialCameraPosition: const CameraPosition(
-//           target: LatLng(3.0738, 101.5183), // Set initial map center (Subang Jaya area)
-//           zoom: 14.0,
-//         ),
-//         markers: Set<Marker>.of(_markers.values),
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () {
-//           // Handle button press (e.g., open a menu, perform an action)
-//         },
-//         child: const Icon(Icons.add),
-//       ),
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+
+class MapsPage extends StatefulWidget {
+  @override
+  State<MapsPage> createState() => MapsPageState();
+}
+
+class MapsPageState extends State<MapsPage> {
+  GoogleMapController? mapController; // Controller for Google map
+  Location location = Location();
+  late LatLng _currentLocation = LatLng(0.0, 0.0); // Initialize with default location
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    try {
+      var userLocation = await location.getLocation();
+      setState(() {
+        _currentLocation = LatLng(userLocation.latitude!, userLocation.longitude!);
+      });
+    } catch (e) {
+      print('Error getting user location: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Google Map Navigation'),
+      ),
+      body: Stack(
+        children: [
+          GoogleMap(
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: CameraPosition(
+              // Set the initial position of the map.
+              target: LatLng(37.42796133580664, -122.085749655962),
+              zoom: 14.0,
+            ),
+            mapType: MapType.normal, // You can also change map type to satellite, hybrid, etc.
+            markers: Set.of(
+              [
+                Marker(
+                  markerId: MarkerId('currentLocation'),
+                  position: _currentLocation,
+                  infoWindow: InfoWindow(title: 'Your Location'),
+                ),
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: EdgeInsets.only(left: 16.0, bottom: 16.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  _getCurrentLocation();
+                },
+                tooltip: 'Get Current Location',
+                child: Icon(Icons.my_location),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

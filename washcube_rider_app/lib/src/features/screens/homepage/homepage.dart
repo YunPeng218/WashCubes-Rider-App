@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
 import 'package:washcube_rider_app/src/features/screens/dropoff_laundrysite/laundrycenter_dropoff_screen.dart';
@@ -109,6 +108,16 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               child: const Text('pickupfromcentre',),
+            ),
+            
+            OutlinedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>  MapsPage()),
+                );
+              },
+              child: const Text('maps',),
             ),
             //TODO: Test Purpose Accept Job Bottom Modal
             OutlinedButton(
