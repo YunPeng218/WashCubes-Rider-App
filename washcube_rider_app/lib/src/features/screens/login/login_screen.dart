@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
-import 'package:washcube_rider_app/src/features/screens/homepage/homepage.dart';
+import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart';
 import 'package:washcube_rider_app/src/features/screens/password%20reset/email_input_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/textfield_theme.dart';
@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (passwordController.text.isNotEmpty) {
       Navigator.pushAndRemoveUntil(
         context, 
-        MaterialPageRoute(builder: (context) => const HomePage()), 
+        MaterialPageRoute(builder: (context) => MapsPage()), 
         (route) => false
       );
       // if (pattern.hasMatch(passwordController.text)) {

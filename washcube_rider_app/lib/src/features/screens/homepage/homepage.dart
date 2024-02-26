@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
-import 'package:washcube_rider_app/src/features/screens/dropoff_laundrysite/laundrycenter_dropoff_screen.dart';
 import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart';
 import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/pickup_locker_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
@@ -71,6 +70,16 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ],
+              ),
+              //Maps Page
+              OutlinedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  MapsPage()),
+                  );
+                },
+                child: const Text('maps',),
               ),
               //TODO: Test Purpose Accept Job from Locker Bottom Modal
               OutlinedButton(
@@ -178,17 +187,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: const Text('accept pickup job from locker',),
               ),
-              
-            OutlinedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) =>  MapsPage()),
-                );
-              },
-              child: const Text('maps',),
-            ),
-            //TODO: Test Purpose Accept Job from laundrySite Bottom Modal
+              //TODO: Test Purpose Accept Job from laundrySite Bottom Modal
               OutlinedButton(
                 onPressed: () {
                   showModalBottomSheet<void>(

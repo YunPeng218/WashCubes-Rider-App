@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
-import 'package:washcube_rider_app/src/features/screens/homepage/homepage.dart';
+import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 
 class OrderCompleteScreen extends StatefulWidget {
@@ -22,7 +22,7 @@ class _OrderCompleteScreenState extends State<OrderCompleteScreen> {
       // Use pushReplacement to replace the current screen with the homepage
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => MapsPage()),
         (route) => false,
       );
     });

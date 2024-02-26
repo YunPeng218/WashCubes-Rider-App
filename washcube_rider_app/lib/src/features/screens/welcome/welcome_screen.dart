@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
-import 'package:washcube_rider_app/src/features/screens/homepage/homepage.dart';
+import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart';
 import 'package:washcube_rider_app/src/features/screens/login/login_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 
@@ -47,7 +47,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     //For Now Go Straight to HomePage for Testing Purposes
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
+                      MaterialPageRoute(builder: (context) => MapsPage()),
                     );
                   }, 
                   child: Text('Join as a Rider', style: CTextTheme.blackTextTheme.headlineMedium,),

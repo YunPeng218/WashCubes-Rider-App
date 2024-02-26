@@ -4,8 +4,8 @@ import 'package:washcube_rider_app/src/common_widgets/help_widget.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
-import 'package:washcube_rider_app/src/features/screens/homepage/homepage.dart';
 import 'package:washcube_rider_app/src/features/screens/id_rider/id_verification_screen.dart';
+import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 import '../locker_qr/locker_qr_screen.dart';
 
@@ -147,7 +147,7 @@ class _DropOffLocker2State extends State<DropOffLocker2> {
                       onPressed: (){
                         Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomePage()),
+                            MaterialPageRoute(builder: (context) => MapsPage()),
                                 (route) => false
                         );
                       },
