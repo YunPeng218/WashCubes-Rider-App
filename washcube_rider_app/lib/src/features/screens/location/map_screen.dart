@@ -28,9 +28,14 @@ class MapsPageState extends State<MapsPage> {
       setState(() {
         _currentLocation = LatLng(userLocation.latitude!, userLocation.longitude!);
       });
+      _moveToCurrentLocation();
     } catch (e) {
       print('Error getting user location: $e');
     }
+  }
+
+  void _moveToCurrentLocation() {
+    mapController?.animateCamera(CameraUpdate.newLatLng(_currentLocation));
   }
 
   @override
@@ -45,7 +50,7 @@ class MapsPageState extends State<MapsPage> {
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
               // Set the initial position of the map.
-              target: LatLng(37.42796133580664, -122.085749655962),
+              target: _currentLocation,
               zoom: 14.0,
             ),
             mapType: MapType.normal, // You can also change map type to satellite, hybrid, etc.
@@ -65,7 +70,7 @@ class MapsPageState extends State<MapsPage> {
               padding: EdgeInsets.only(left: 16.0, bottom: 16.0),
               child: FloatingActionButton(
                 onPressed: () {
-                  _getCurrentLocation();
+                  _moveToCurrentLocation();
                 },
                 tooltip: 'Get Current Location',
                 child: Icon(Icons.my_location),

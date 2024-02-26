@@ -42,7 +42,7 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   permission_handler: ^11.3.0
   google_maps_flutter: ^2.5.3
-  location: ^4.3.0
+  location: ^5.0.3
 
 
 
