@@ -8,10 +8,10 @@ class BarcodeScannerWidget extends StatefulWidget {
   final bool isScanning;
 
   const BarcodeScannerWidget({
-    Key? key,
+    super.key,
     required this.onScanResult,
     required this.isScanning,
-  }) : super(key: key);
+  });
 
   @override
   _BarcodeScannerWidgetState createState() => _BarcodeScannerWidgetState();

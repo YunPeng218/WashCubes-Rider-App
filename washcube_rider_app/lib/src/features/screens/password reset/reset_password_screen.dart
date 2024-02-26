@@ -57,9 +57,10 @@ class _ResetPasswordState extends State<ResetPassword> {
   void confirmpasswordvalidation() async {
     if (confirmpasswordController.text.isNotEmpty) { //Check Whether Input is Empty
       if (confirmpasswordController.text == newpasswordController.text) { //Check Input Match Above Text Field
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const PasswordUpdatedScreen()),
+          (route) => false,
         );
         isNotValidatePassword1 = false;
       } else {

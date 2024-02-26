@@ -40,6 +40,11 @@ dependencies:
   shared_preferences: ^2.2.2
   http: ^1.2.0
   flutter_barcode_scanner: ^2.0.0
+  permission_handler: ^11.3.0
+  google_maps_flutter: ^2.5.3
+  location: ^5.0.3
+
+
 
 dev_dependencies:
   flutter_test:
@@ -51,11 +56,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.1
-
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/logos/i3Cubes_logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -75,7 +75,6 @@ flutter:
   assets:
    - assets/logos/
    - assets/images/
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
