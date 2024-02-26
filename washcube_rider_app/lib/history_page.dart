@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/widgets.dart';
+import 'package:washcube_rider_app/job_details_page.dart';
 
-class HistoryPage extends StatelessWidget {
+class HistoryPage extends StatefulWidget {
+  const HistoryPage({super.key});
+
+  @override
+  State<HistoryPage> createState() => _HistoryPageState();
+}
+
+class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
         title: Text('History'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.calendar_today),
-            onPressed: () {
-              // TODO: Implement calendar picker
-            },
-          ),
-        ],
+        centerTitle: true,
       ),
       body: ListView(
+        shrinkWrap: true,
         children: <Widget>[
+          //TODO: Bottom Modal PopUp of Date Sorting
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Expanded(
+                SizedBox(
+                  width: 150,
+                  height: 150,
                   child: PieChart(
                     PieChartData(
                       sections: [
@@ -40,7 +47,9 @@ class HistoryPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Expanded(
+                SizedBox(
+                  width: 150,
+                  height: 150,
                   child: PieChart(
                     PieChartData(
                       sections: [
@@ -72,14 +81,20 @@ class HistoryPage extends StatelessWidget {
       title: Text('Order ID : #9612'),
       subtitle: Text('23 Nov 2023, 22:13 | +30 Points'),
       trailing: isDone
-          ? Chip(
+          ? const Chip(
         label: Text('DONE'),
         backgroundColor: Colors.green,
       )
-          : Chip(
+          : const Chip(
         label: Text('CANCEL'),
         backgroundColor: Colors.red,
       ),
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const JobDetailsPage()),
+        );
+      },
     );
   }
 }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:washcube_rider_app/job_detail_description.dart';
 
 class JobDetailsPage extends StatelessWidget {
+  const JobDetailsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +55,10 @@ class JobDetailsPage extends StatelessWidget {
                     ),
                     trailing: TextButton(
                       onPressed: () {
-                        // TODO: Implement See Details action
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const JobDetailDescriptionPage()),
+                        );
                       },
                       child: Text('See Details'),
                     ),

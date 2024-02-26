@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class SystemSettingsPage extends StatefulWidget {
+  const SystemSettingsPage({super.key});
+
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  SettingsPageState createState() => SettingsPageState();
 }
 
-class _SettingsPageState extends State<SystemSettingsPage> {
+class SettingsPageState extends State<SystemSettingsPage> {
   bool autoReceiveOrder = false;
   bool receivePickUpAlerts = true;
 
@@ -67,8 +69,8 @@ class _SettingsPageState extends State<SystemSettingsPage> {
             padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Colors.black, // background (button) color
-                onPrimary: Colors.white, // foreground (text) color
+                backgroundColor: Colors.black, // background (button) color
+                foregroundColor: Colors.white, // foreground (text) color
               ),
               onPressed: () {
                 // TODO: Implement delete account functionality

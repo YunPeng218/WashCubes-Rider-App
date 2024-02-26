@@ -1,0 +1,1 @@
+const String cMap01 = 'assets/images/map01.png';
