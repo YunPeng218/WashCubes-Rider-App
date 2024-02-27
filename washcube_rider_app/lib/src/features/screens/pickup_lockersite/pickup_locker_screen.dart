@@ -102,7 +102,7 @@ class _PickupLockerState extends State<PickupLocker> {
             ),
             const SizedBox(height: 20.0),
 
-            // Container 2
+            // Location
             ListTile(
               title: Text('Location', style: CTextTheme.greyTextTheme.headlineMedium,),
               subtitle: Text('Sunway Geo Residences', style: CTextTheme.blackTextTheme.headlineMedium,),

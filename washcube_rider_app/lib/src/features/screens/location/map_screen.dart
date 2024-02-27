@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
-import 'package:washcube_rider_app/profile_left_navigation_bar.dart';
+import 'package:washcube_rider_app/src/features/screens/left_nav_bar/profile_left_navigation_bar.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
 import 'package:washcube_rider_app/src/features/screens/pickup_laundrysite/pickup_laundrysite_screen.dart';
@@ -10,6 +10,8 @@ import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/pickup
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 
 class MapsPage extends StatefulWidget {
+  const MapsPage({super.key});
+
   @override
   State<MapsPage> createState() => MapsPageState();
 }
@@ -49,9 +51,7 @@ class MapsPageState extends State<MapsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Google Map Navigation'),
-      // ),
+      drawer: const LeftNavigationBar(), // Drawer widget for the left navigation bar
       body: SafeArea(
         child: Stack(
           children: [
@@ -63,15 +63,13 @@ class MapsPageState extends State<MapsPage> {
                 zoom: 14.0,
               ),
               mapType: MapType.normal, // You can also change map type to satellite, hybrid, etc.
-              markers: Set.of(
-                [
+              markers: {
                   Marker(
-                    markerId: MarkerId('currentLocation'),
+                    markerId: const MarkerId('currentLocation'),
                     position: _currentLocation,
-                    infoWindow: InfoWindow(title: 'Your Location'),
+                    infoWindow: const InfoWindow(title: 'Your Location'),
                   ),
-                ],
-              ),
+                },
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -79,24 +77,21 @@ class MapsPageState extends State<MapsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //Menu Button
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LeftNavigationBar()),
+                  Builder(
+                    builder: (context) {
+                      return IconButton(
+                        onPressed: () {
+                          Scaffold.of(context).openDrawer();
+                        }, 
+                        icon: const Icon(Icons.menu, color: AppColors.cBlackColor,),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(
+                                  AppColors.cWhiteColor),
+                        ),
                       );
-                    },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(
-                              AppColors.cWhiteColor),
-                    ),
-                    child: const Icon(
-                      Icons.menu,
-                      color: AppColors.cBlackColor,
-                    ),
+                    }
                   ),
-                  
                   //Status Switch
                   ElevatedButton(
                     onPressed: null,
@@ -258,13 +253,6 @@ class MapsPageState extends State<MapsPage> {
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
-                                        ////No Need for Multiple Steps as Pick Up of Different Location is Not Allowed as Discussed
-                                        // Column(
-                                        //   children: [
-                                        //     CircleAvatar(backgroundColor: AppColors.cButtonColor,child: Text('2'),),
-                                        //     Text('STOPS', style: CTextTheme.blackTextTheme.labelLarge,),
-                                        //   ],
-                                        // ),
                                         Text('ORDER : #9612', style: CTextTheme.greyTextTheme.labelLarge,)
                                       ],),
                                       const SizedBox(height: cDefaultSize,),
