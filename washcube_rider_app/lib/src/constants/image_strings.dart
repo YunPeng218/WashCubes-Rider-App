@@ -12,3 +12,8 @@ const String cMap03 = "assets/images/map03.png";
 //Rider ID Verification
 const String cRiderPFP = 'assets/images/rider_pfp.png';
 const String cQRCode = 'assets/images/qr_code.png';
+
+// Pickup / Dropoff Images
+const String cTagDefault = "assets/images/tag_default.png";
+const String cImageDefault = "assets/images/image_default.png";
+const String cDone = "assets/images/done.png";

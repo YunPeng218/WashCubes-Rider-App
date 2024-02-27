@@ -9,7 +9,10 @@ class LockerQRScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Locker QR', style: CTextTheme.blackTextTheme.displaySmall,),
+        title: Text(
+          'Locker QR',
+          style: CTextTheme.blackTextTheme.displaySmall,
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -20,10 +23,13 @@ class LockerQRScreen extends StatelessWidget {
             children: [
               Image.asset('assets/images/qr_code_id.png'),
               const SizedBox(height: 24),
-              Text('Show QR code to the locker for access.', style: CTextTheme.greyTextTheme.headlineSmall,),
+              Text(
+                'Show QR code to the locker for access.',
+                style: CTextTheme.greyTextTheme.headlineSmall,
+              ),
               const SizedBox(height: cDefaultSize),
-              Text('User Order ID : #906912', style: CTextTheme.blackTextTheme.headlineMedium,),
-              Text('Created by 23 Nov 2023, 14:29', style: CTextTheme.greyTextTheme.headlineSmall,),
+              // Text('User Order ID : #906912', style: CTextTheme.blackTextTheme.headlineMedium,),
+              // Text('Created by 23 Nov 2023, 14:29', style: CTextTheme.greyTextTheme.headlineSmall,),
             ],
           ),
         ),
