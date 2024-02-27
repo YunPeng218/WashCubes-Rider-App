@@ -6,7 +6,6 @@ import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
 import 'package:washcube_rider_app/src/features/screens/pickup_laundrysite/pickup_laundrysite_screen.dart';
 import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/locker_site_pickup_dropoff.dart';
-import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/select_pickup_locker_site.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:washcube_rider_app/src/models/job.dart';
 import 'package:washcube_rider_app/src/models/locker.dart';
@@ -19,6 +18,7 @@ import 'package:washcube_rider_app/src/models/order.dart';
 import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/laundry_site_pickup_dropoff.dart';
 import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/select_locker_site_orders.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
+import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/select_laundry_site_orders.dart';
 
 class MapsPage extends StatefulWidget {
   @override
@@ -36,8 +36,8 @@ class MapsPageState extends State<MapsPage> {
   LockerSite? activeJobLocation;
   bool hasActiveJob = false;
   List<LockerSite> lockerSites = [];
-  List<LockerCount> lockerCounts = [];
-  Map<String, String> lockerCountMap = {};
+  Map<String, String> lockerPickupOrdersMap = {};
+  Map<String, String> lockerDropoffOrdersMap = {};
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -49,7 +49,8 @@ class MapsPageState extends State<MapsPage> {
     _getCurrentLocation();
     getActiveJob();
     fetchLockerSites();
-    fetchLockerOrderCount();
+    fetchLockerPickupOrderCount();
+    fetchLockerDropoffOrderCount();
   }
 
   Future<void> _getCurrentLocation() async {
@@ -138,7 +139,7 @@ class MapsPageState extends State<MapsPage> {
     }
   }
 
-  Future<void> fetchLockerOrderCount() async {
+  Future<void> fetchLockerPickupOrderCount() async {
     try {
       var reqUrl = '${url}orders/ready-for-pickup/all-sites';
       final response = await http.get(Uri.parse(reqUrl));
@@ -149,12 +150,10 @@ class MapsPageState extends State<MapsPage> {
         if (data.containsKey('mapArray')) {
           final List<dynamic> mapData = data['mapArray'];
           for (var item in mapData) {
-            lockerCountMap[item[0] as String] =
-                item[1].toString(); // Access key and value from each entry
+            lockerPickupOrdersMap[item[0] as String] = item[1].toString();
           }
         }
       } else {
-        // If the server did not return a 200 OK response, throw an exception.
         throw Exception('Failed to load order count');
       }
     } catch (error) {
@@ -162,14 +161,50 @@ class MapsPageState extends State<MapsPage> {
     }
   }
 
-  void handleLockerSiteSelection(LockerSite selectedLockerSite) async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) =>
-            PickupOrderSelect(selectedLockerSite: selectedLockerSite),
-      ),
-    );
+  Future<void> fetchLockerDropoffOrderCount() async {
+    try {
+      var reqUrl = '${url}orders/ready-for-dropoff/all-sites';
+      final response = await http.get(Uri.parse(reqUrl));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+
+        if (data.containsKey('mapArray')) {
+          final List<dynamic> mapData = data['mapArray'];
+          for (var item in mapData) {
+            lockerDropoffOrdersMap[item[0] as String] = item[1].toString();
+          }
+        }
+      } else {
+        throw Exception('Failed to load order count');
+      }
+    } catch (error) {
+      print('Error fetching orders count: $error');
+    }
+  }
+
+  void handleLockerSiteSelection(
+      LockerSite selectedLockerSite, String jobType) async {
+    switch (jobType) {
+      case 'Locker to Laundry Site':
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                PickupOrderSelect(selectedLockerSite: selectedLockerSite),
+          ),
+        );
+        return;
+      case 'Laundry Site to Locker':
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                PickupLaundrySiteOrder(selectedLockerSite: selectedLockerSite),
+          ),
+        );
+        return;
+    }
   }
 
   void jobDetailsHandler() {
@@ -482,99 +517,6 @@ class MapsPageState extends State<MapsPage> {
                     'Select Pickup Location',
                     style: CTextTheme.blackTextTheme.headlineLarge,
                   ),
-                  // //First Step on Job
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: [
-                  //     const CircleAvatar(
-                  //       backgroundColor: AppColors.cGreyColor1,
-                  //       child: Text('1'),
-                  //     ),
-                  //     const SizedBox(
-                  //       width: 10.0,
-                  //     ),
-                  //     Expanded(
-                  //       child: Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               Text(
-                  //                 'PICK UP',
-                  //                 style:
-                  //                     CTextTheme.greyTextTheme.headlineMedium,
-                  //               ),
-                  //               Text(
-                  //                 '3.4KM - 10 MIN',
-                  //                 style:
-                  //                     CTextTheme.blackTextTheme.headlineSmall,
-                  //               ),
-                  //             ],
-                  //           ),
-                  //           Text(
-                  //             'Sunway Geo Residences',
-                  //             style: CTextTheme.blackTextTheme.headlineMedium,
-                  //           ),
-                  //           Text(
-                  //             'Persiaran Tasik Timur, Sunway South Quay, Bandar Sunway, 47500 Subang Jaya, Selangor',
-                  //             style: CTextTheme.greyTextTheme.labelLarge,
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // const SizedBox(
-                  //   height: cDefaultSize,
-                  // ),
-
-                  // //Second Step on the Job
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: [
-                  //     const CircleAvatar(
-                  //       backgroundColor: AppColors.cGreyColor1,
-                  //       child: Text('2'),
-                  //     ),
-                  //     const SizedBox(
-                  //       width: 10.0,
-                  //     ),
-                  //     Expanded(
-                  //       child: Column(
-                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                  //         children: [
-                  //           Row(
-                  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //             children: [
-                  //               Text(
-                  //                 'DROP OFF',
-                  //                 style:
-                  //                     CTextTheme.greyTextTheme.headlineMedium,
-                  //               ),
-                  //               Text(
-                  //                 '2.8KM - 6 MIN',
-                  //                 style:
-                  //                     CTextTheme.blackTextTheme.headlineSmall,
-                  //               ),
-                  //             ],
-                  //           ),
-                  //           Text(
-                  //             'i3 Laundry Centre',
-                  //             style: CTextTheme.blackTextTheme.headlineMedium,
-                  //           ),
-                  //           Text(
-                  //             'Persiaran Tasik Timur, Sunway South Quay, Bandar Sunway, 47500 Subang Jaya, Selangor',
-                  //             style: CTextTheme.greyTextTheme.labelLarge,
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // const SizedBox(
-                  //   height: cDefaultSize,
-                  // ),
                   ListView.builder(
                     itemCount: lockerSites.length,
                     shrinkWrap: true,
@@ -585,11 +527,11 @@ class MapsPageState extends State<MapsPage> {
                             child: LockerSiteOption(
                                 title: lockerSites[index].name,
                                 subtitle:
-                                    lockerCountMap[lockerSites[index].id] ??
-                                        'Loading...',
+                                    'Orders Ready For Pick Up: ${lockerPickupOrdersMap[lockerSites[index].id] ?? 'Loading...'}',
                                 icon: Icons.location_on,
                                 onTap: () {
-                                  handleLockerSiteSelection(lockerSites[index]);
+                                  handleLockerSiteSelection(lockerSites[index],
+                                      'Locker to Laundry Site');
                                 }),
                           ),
                         ],
@@ -605,7 +547,51 @@ class MapsPageState extends State<MapsPage> {
     );
   }
 
-  void showPickupLaundrySiteModal() {}
+  void showPickupLaundrySiteModal() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.all(cDefaultSize),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Select Drop Off Location',
+                    style: CTextTheme.blackTextTheme.headlineLarge,
+                  ),
+                  ListView.builder(
+                    itemCount: lockerSites.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: LockerSiteOption(
+                                title: lockerSites[index].name,
+                                subtitle:
+                                    'Orders Ready For Drop Off: ${lockerPickupOrdersMap[lockerSites[index].id] ?? 'Loading...'}',
+                                icon: Icons.location_on,
+                                onTap: () {
+                                  handleLockerSiteSelection(lockerSites[index],
+                                      'Laundry Site to Locker');
+                                }),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -767,13 +753,18 @@ class LockerSiteOption extends StatelessWidget {
         const SizedBox(height: 8),
         ListTile(
           leading: Icon(icon, color: Colors.blue),
-          title: Text(
-            title,
-            style: CTextTheme.blackTextTheme.headlineMedium,
-          ),
-          subtitle: Text(
-            'Orders Ready For Pickup: $subtitle',
-            style: CTextTheme.blackTextTheme.headlineSmall,
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: CTextTheme.blackTextTheme.headlineMedium,
+              ),
+              Text(
+                subtitle,
+                style: CTextTheme.blackTextTheme.headlineSmall,
+              ),
+            ],
           ),
           trailing: const Icon(Icons.chevron_right, color: Colors.grey),
           onTap: onTap,
