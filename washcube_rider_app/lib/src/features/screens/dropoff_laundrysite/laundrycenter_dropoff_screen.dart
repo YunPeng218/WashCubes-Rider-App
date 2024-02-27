@@ -17,12 +17,28 @@ class DropOffLaundryCenterScreen extends StatefulWidget {
       _DropOffLaundryCenterScreenState();
 }
 
-class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen> {
+class _DropOffLaundryCenterScreenState
+    extends State<DropOffLaundryCenterScreen> {
   // Item List Data
   final List<Map<String, dynamic>> items = [
-    {'number': '#1911109579612', 'scan': 'Scan', 'description': 'Scan to attached info', 'scanned': false,},
-    {'number': '#1911109579625', 'scan': 'Scan', 'description': 'Scan to attached info', 'scanned': false,},
-    {'number': '#1215020113224', 'scan': 'Scan', 'description': 'Scan to attached info', 'scanned': false,},
+    {
+      'number': '#1911109579612',
+      'scan': 'Scan',
+      'description': 'Scan to attached info',
+      'scanned': false,
+    },
+    {
+      'number': '#1911109579625',
+      'scan': 'Scan',
+      'description': 'Scan to attached info',
+      'scanned': false,
+    },
+    {
+      'number': '#1215020113224',
+      'scan': 'Scan',
+      'description': 'Scan to attached info',
+      'scanned': false,
+    },
   ];
   TextEditingController nameController = TextEditingController();
   bool isNotValidateName = false;
@@ -57,10 +73,10 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
     RegExp pattern = RegExp(r'^\d{6}-\d{2}-\d{4}$');
     if (icController.text.isNotEmpty) {
       if (pattern.hasMatch(icController.text)) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const OrderCompleteScreen()),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => const OrderCompleteScreen()),
+        // );
         // TODO: Put Action Here After IC is Valid
       } else {
         setState(() {
@@ -84,14 +100,17 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
         actions: [
           //Rider ID QR Code Button
           ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const IDVerificationScreen()),
-              );
-            },
-            child: const Icon(Icons.badge_outlined,color: AppColors.cBlackColor,)
-          ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const IDVerificationScreen()),
+                );
+              },
+              child: const Icon(
+                Icons.badge_outlined,
+                color: AppColors.cBlackColor,
+              )),
         ],
       ),
       //Scrollable Screen
@@ -107,38 +126,56 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Order #0000', style: CTextTheme.greyTextTheme.headlineSmall,), //Order Number
-                      Text('3 • Drop Off', style: CTextTheme.blueTextTheme.displaySmall,), //Job Step & Title
-                      Text('Laundry Centre', style: CTextTheme.blackTextTheme.displaySmall,), //Destination Name
+                      Text(
+                        'Order #0000',
+                        style: CTextTheme.greyTextTheme.headlineSmall,
+                      ), //Order Number
+                      Text(
+                        '3 • Drop Off',
+                        style: CTextTheme.blueTextTheme.displaySmall,
+                      ), //Job Step & Title
+                      Text(
+                        'Laundry Centre',
+                        style: CTextTheme.blackTextTheme.displaySmall,
+                      ), //Destination Name
                     ],
                   ),
                 ),
                 //Destination Map Image
-                Expanded(child: Image.asset(cMap03,height: size.height * 0.15)),
+                Expanded(
+                    child: Image.asset(cMap03, height: size.height * 0.15)),
               ],
             ),
             const SizedBox(height: 10.0),
 
             //Help Button
             ElevatedButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const HelpWidget();
-                  },
-                );
-              },
-              child: Text('Help', style: CTextTheme.blackTextTheme.headlineMedium,)
-            ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const HelpWidget();
+                    },
+                  );
+                },
+                child: Text(
+                  'Help',
+                  style: CTextTheme.blackTextTheme.headlineMedium,
+                )),
             const SizedBox(height: 10.0),
 
             //Item Count Title
             Row(
               children: [
-                Text('Item Qty', style: CTextTheme.greyTextTheme.headlineSmall,),
+                Text(
+                  'Item Qty',
+                  style: CTextTheme.greyTextTheme.headlineSmall,
+                ),
                 const SizedBox(width: 20.0),
-                Text('3 Item(s)', style: CTextTheme.blackTextTheme.headlineSmall,),
+                Text(
+                  '3 Item(s)',
+                  style: CTextTheme.blackTextTheme.headlineSmall,
+                ),
               ],
             ),
             const SizedBox(height: 20.0),
@@ -147,20 +184,28 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
             //Task List
             ListView.builder(
               shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(), // disable scrolling
+              physics:
+                  const NeverScrollableScrollPhysics(), // disable scrolling
               itemCount: items.length,
               itemBuilder: (context, index) {
                 final item = items[index];
                 return ListTile(
-                  leading: const Icon(Icons.qr_code_scanner_rounded, color: Colors.blue), //Left Icon
-                  title: Text(item['number'], style: CTextTheme.blackTextTheme.headlineLarge,), //Order Number
+                  leading: const Icon(Icons.qr_code_scanner_rounded,
+                      color: Colors.blue), //Left Icon
+                  title: Text(
+                    item['number'],
+                    style: CTextTheme.blackTextTheme.headlineLarge,
+                  ), //Order Number
                   //Scan Action Button
                   //Call for Barcode Scanner Widget
                   trailing: BarcodeScannerWidget(
                     isScanning: item['scanned'],
                     onScanResult: (result) => _handleScanResult(index, result),
                   ),
-                  subtitle: Text(item['description'], style: CTextTheme.greyTextTheme.headlineSmall,),
+                  subtitle: Text(
+                    item['description'],
+                    style: CTextTheme.greyTextTheme.headlineSmall,
+                  ),
                   contentPadding: const EdgeInsets.all(10),
                   horizontalTitleGap: 10,
                 );
@@ -169,10 +214,16 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
             const Divider(),
             const SizedBox(height: cDefaultSize),
             //Receiver Detail Input Section
-            Text('Receiver Details', style: CTextTheme.greyTextTheme.headlineSmall,),
+            Text(
+              'Receiver Details',
+              style: CTextTheme.greyTextTheme.headlineSmall,
+            ),
             const SizedBox(height: 20.0),
             //Receiver Name Input Field
-            Text('RECEIVER', style: CTextTheme.greyTextTheme.headlineSmall,),
+            Text(
+              'RECEIVER',
+              style: CTextTheme.greyTextTheme.headlineSmall,
+            ),
             const SizedBox(height: 5.0),
             Theme(
               data: Theme.of(context).copyWith(
@@ -192,7 +243,10 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
               ),
             ),
             const SizedBox(height: 10.0),
-            Text('I.C. NUMBER', style: CTextTheme.greyTextTheme.headlineSmall,),
+            Text(
+              'I.C. NUMBER',
+              style: CTextTheme.greyTextTheme.headlineSmall,
+            ),
             //IC Number Input Field
             const SizedBox(height: 5.0),
             Theme(
@@ -203,7 +257,7 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
               child: Form(
                 child: TextField(
                   controller: icController, //Validating IC Input
-                  decoration: InputDecoration( 
+                  decoration: InputDecoration(
                     hintText: '000000-00-0000',
                     floatingLabelBehavior:
                         FloatingLabelBehavior.always, //Keeps Label Float Atop
@@ -217,12 +271,14 @@ class _DropOffLaundryCenterScreenState extends State<DropOffLaundryCenterScreen>
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: (){
-                      namevalidation();
-                      icvalidation();
-                    }, 
-                    child: Text('Drop Off', style: CTextTheme.blackTextTheme.headlineMedium,)
-                  ),
+                      onPressed: () {
+                        namevalidation();
+                        icvalidation();
+                      },
+                      child: Text(
+                        'Drop Off',
+                        style: CTextTheme.blackTextTheme.headlineMedium,
+                      )),
                 ),
               ],
             ),

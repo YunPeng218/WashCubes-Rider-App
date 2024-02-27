@@ -1,13 +1,16 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
 import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 
+import 'package:washcube_rider_app/src/models/job.dart';
+
 class OrderCompleteScreen extends StatefulWidget {
-  const OrderCompleteScreen({super.key});
+  final Job? activeJob;
+
+  const OrderCompleteScreen({super.key, required this.activeJob});
 
   @override
   State<OrderCompleteScreen> createState() => _OrderCompleteScreenState();
@@ -37,22 +40,17 @@ class _OrderCompleteScreenState extends State<OrderCompleteScreen> {
           child: ListView(
             shrinkWrap: true,
             children: [
-              Image.asset(cDoubleCheckmark),
+              Image.asset(
+                cDoubleCheckmark,
+                height: 75,
+                width: 75,
+              ),
+              const SizedBox(height: 20.0),
               Text(
-                //TODO: Change Order Number Dynamically Depending on the Order Database
-                'Order #00000000 Completed!',
+                'Job ${widget.activeJob?.jobNumber} Completed!',
                 style: CTextTheme.blackTextTheme.displaySmall,
                 textAlign: TextAlign.center,
               ),
-              // ElevatedButton(
-              //     onPressed: () {
-              //       Navigator.pushAndRemoveUntil(
-              //         context, 
-              //         MaterialPageRoute(builder: (context) => const HomePage()), 
-              //         (route) => false
-              //       );
-              //     },
-              //     child: Text('Back To Home', style: CTextTheme.blackTextTheme.headlineMedium,)),
             ],
           ),
         ),
