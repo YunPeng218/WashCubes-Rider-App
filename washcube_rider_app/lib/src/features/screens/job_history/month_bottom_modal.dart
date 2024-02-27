@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
-import 'package:washcube_rider_app/src/constants/sizes.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 
 class MonthSelectModal extends StatefulWidget {
@@ -24,57 +24,63 @@ class _MonthSelectModalState extends State<MonthSelectModal> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: Padding(
-        padding: const EdgeInsets.all(cDefaultSize),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              //Month List
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(), // disable scrolling
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  return ListTile(
-                    title: Text(item['month-year'], style: item['status'] ? CTextTheme.blueTextTheme.headlineSmall : CTextTheme.blackTextTheme.headlineSmall,), //List Title
-                    trailing: Icon(
-                      //Check Selected Status, If Selected > Blue Checkmark
-                      item['status'] ? Icons.check : null,
-                      color: item['status'] ? AppColors.cBlueColor3 : null,
-                    ),
-                    contentPadding: const EdgeInsets.all(5),
-                    horizontalTitleGap: 5,
-                    selected: item['status'],
-                    onTap: () {
-                      setState(() {
-                        item['status'] = !item['status']; // Toggle the status bool value
-                      });
-                    },
-                  );
+    return Scaffold(
+      body: SizedBox(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                const Divider(),
+                //Month List
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(), // disable scrolling
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return ListTile(
+                      title: Text(item['month-year'], style: item['status'] ? CTextTheme.blueTextTheme.headlineSmall : CTextTheme.blackTextTheme.headlineSmall,), //List Title
+                      trailing: Icon(
+                        //Check Selected Status, If Selected > Blue Checkmark
+                        item['status'] ? Icons.check : null,
+                        color: item['status'] ? AppColors.cBlueColor3 : null,
+                      ),
+                      contentPadding: const EdgeInsets.all(5),
+                      horizontalTitleGap: 5,
+                      selected: item['status'],
+                      onTap: () {
+                        setState(() {
+                          item['status'] = !item['status']; // Toggle the status bool value
+                        });
+                      },
+                    );
+                  },
+                ),
+                Divider(),
+              ],
+            ),
+          ),
+          
+        ),
+      ),
+      //Accept Button
+      //TODO: Send Selected Value to History Page & Change Month Displayed
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                child: Text('Select', style: CTextTheme.blackTextTheme.headlineMedium,),
+                onPressed: () {
+                  Navigator.pop(context);
                 },
               ),
-              const SizedBox(height: cDefaultSize,),
-    
-              //Accept Button
-              //TODO: Send Selected Value to History Page & Change Month Displayed
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      child: Text('Select', style: CTextTheme.blackTextTheme.headlineMedium,),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

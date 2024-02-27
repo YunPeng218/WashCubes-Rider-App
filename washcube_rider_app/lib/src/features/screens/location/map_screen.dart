@@ -290,8 +290,7 @@ class MapsPageState extends State<MapsPage> {
                         activeJob?.pickedUpStatus == true
                             ? const CircleAvatar(
                                 backgroundColor: AppColors.cGreyColor1,
-                                backgroundImage: AssetImage(
-                                    cDoubleCheckmark), // Replace with your image asset path
+                                backgroundImage: AssetImage(cDoubleCheckmark),
                                 radius: 20, // Adjust the radius as needed
                               )
                             : const CircleAvatar(
