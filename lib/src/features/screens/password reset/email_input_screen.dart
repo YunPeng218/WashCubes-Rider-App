@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
 import 'package:washcube_rider_app/src/features/screens/password%20reset/otp_verification_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/textfield_theme.dart';
+import 'package:http/http.dart' as http;
+import 'package:washcube_rider_app/config.dart';
 
 class EmailInputScreen extends StatefulWidget {
   const EmailInputScreen({super.key});
@@ -18,18 +22,12 @@ class _EmailInputScreenState extends State<EmailInputScreen> {
   String errorTextEmail = '';
 
   //Email Validation Function
-  void emailvalidation() async {
+  void emailValidation() async {
     RegExp pattern = RegExp(
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
     if (emailController.text.isNotEmpty) {
       if (pattern.hasMatch(emailController.text)) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const OTPVerifyScreen()),
-        );
-        // await http.post(Uri.parse(otpverification),
-        //     body: {"phoneNumber": phoneNumberController.text});
-        // TODO: Put Action Here After Email is Valid
+        resetPassRequest();
       } else {
         setState(() {
           errorTextEmail = 'Invalid Email Entered.';
@@ -41,6 +39,49 @@ class _EmailInputScreenState extends State<EmailInputScreen> {
         errorTextEmail = 'Please Enter Your Email.';
         isNotValidateEmail = true;
       });
+    }
+  }
+
+  void resetPassRequest() async {
+    var reqUrl = '${url}resetPassRequest';
+    var response = await http.post(Uri.parse(reqUrl),
+      body: {"email": emailController.text});
+    var jsonResponse = jsonDecode(response.body);
+    if (jsonResponse['status'] == 'NotFound') {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'Error',
+              style: CTextTheme.blackTextTheme.headlineLarge
+            ),
+            content: Text(
+              'Unable to find a rider account with the email entered. Please try again.',
+              style: CTextTheme.blackTextTheme.headlineMedium,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  // Close the dialog
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'OK',
+                  style: CTextTheme.blackTextTheme.headlineMedium,
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    } else if (jsonResponse['status'] == 'Sent') {
+        String otpGenerated = jsonResponse['otp'];
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => OTPVerifyScreen(email: emailController.text, otp: otpGenerated),
+        ),
+      );
     }
   }
 
@@ -80,7 +121,7 @@ class _EmailInputScreenState extends State<EmailInputScreen> {
             //Send OTP Button
             ElevatedButton(
               onPressed: () {
-                emailvalidation();
+                emailValidation();
               },
               style: ElevatedButton.styleFrom(
                   minimumSize: const Size(500, cButtonHeight),

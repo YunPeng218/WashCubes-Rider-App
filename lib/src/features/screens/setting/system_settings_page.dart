@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
 import 'package:washcube_rider_app/src/features/screens/password%20reset/reset_password_screen.dart';
@@ -44,43 +46,6 @@ class SettingsPageState extends State<SystemSettingsPage> {
                     });
                   },
                 ),
-                // FutureBuilder<bool>(
-                //   future: isNotificationEnabled(),
-                //   builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                //     if (snapshot.connectionState == ConnectionState.waiting) {
-                //       return const CircularProgressIndicator();
-                //     } else if (snapshot.hasError) {
-                //       return const Text('Error loading notification status');
-                //     } else {
-                //       return Switch(
-                //         value: snapshot.data ?? false,
-                //         activeColor: AppColors.cSwitchColor,
-                //         onChanged: (bool value) async {
-                //           if (value==true) {
-                //             SharedPreferences prefs = await SharedPreferences.getInstance();
-                //             var token = prefs.getString('token');
-                //             Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
-                //             var reqUrl = '${url}addFCMToken';
-                //             http.patch(Uri.parse(reqUrl),
-                //               body: {"userId": jwtDecodedToken['_id'], "fcmToken": prefs.getString('fcmToken')});
-                //             await prefs.setString('isNotificationEnabled', 'true');
-                //           } else {
-                //             SharedPreferences prefs = await SharedPreferences.getInstance();
-                //             var token = prefs.getString('token');
-                //             Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token!);
-                //             var reqUrl = '${url}deleteFCMToken';
-                //             http.patch(Uri.parse(reqUrl),
-                //               body: {"userId": jwtDecodedToken['_id'], "fcmToken": prefs.getString('fcmToken')});
-                //             await prefs.setString('isNotificationEnabled', 'false');
-                //           }
-                //           setState(() {
-                //             orderstatuslight = value;
-                //           });
-                //         },
-                //       );
-                //     }
-                //   },
-                // ),
               ],
             ),
             // Pick Up Alert Switch Row
@@ -104,10 +69,13 @@ class SettingsPageState extends State<SystemSettingsPage> {
             Text('ACCOUNT SETTING', style: CTextTheme.greyTextTheme.labelLarge),
             // Reset Password
             TextButton(
-              onPressed: (){
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String token = (prefs.getString('token')) ?? 'No token';
+                Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token);
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ResetPassword()),
+                  MaterialPageRoute(builder: (context) => ResetPassword(jwtDecodedToken['email'])),
                 );
               }, 
               child: Row(
@@ -115,32 +83,6 @@ class SettingsPageState extends State<SystemSettingsPage> {
                 children: [
                   Text('Reset Password', style: CTextTheme.blackTextTheme.headlineMedium),
                   const Icon(Icons.arrow_forward_ios_rounded, color: AppColors.cGreyColor2,),
-                  // FutureBuilder<bool>(
-                  //   future: isBiometricsEnabled(),
-                  //   builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                  //     if (snapshot.connectionState == ConnectionState.waiting) {
-                  //       return const CircularProgressIndicator();
-                  //     } else if (snapshot.hasError) {
-                  //       return const Text('Error loading biometric status');
-                  //     } else {
-                  //       return Switch(
-                  //         value: snapshot.data ?? false,
-                  //         activeColor: AppColors.cSwitchColor,
-                  //         onChanged: (bool value) async {
-                  //           if (value==true) {
-                  //             checkBiometrics(context);
-                  //           } else {
-                  //             SharedPreferences prefs = await SharedPreferences.getInstance();
-                  //             await prefs.setString('isBiometricsEnabled', 'false');
-                  //           }
-                  //           setState(() {
-                  //             biometriclight = value;
-                  //           });
-                  //         },
-                  //       );
-                  //     }
-                  //   },
-                  // ),
                 ],
               ),
             ), 

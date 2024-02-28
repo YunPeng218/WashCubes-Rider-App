@@ -25,65 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String errorTextEmail = '';
   String errorTextPassword = '';
 
-  //Email Validation Function
-  // void emailvalidation() async {
-  //   RegExp pattern = RegExp(
-  //       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-  //   if (emailController.text.isNotEmpty) {
-  //     if (pattern.hasMatch(emailController.text)) {
-  //       // Navigator.push(
-  //       //   context,
-  //       //   MaterialPageRoute(builder: (context) => const OTPVerifyPage()),
-  //       // );
-  //       // await http.post(Uri.parse(otpverification),
-  //       //     body: {"phoneNumber": phoneNumberController.text});
-  //       // TODO: Put Action Here After Email is Valid
-  //     } else {
-  //       setState(() {
-  //         errorTextEmail = 'Invalid Email Entered.';
-  //         isNotValidateEmail = true;
-  //       });
-  //     }
-  //   } else {
-  //     setState(() {
-  //       errorTextEmail = 'Please Enter Your Email.';
-  //       isNotValidateEmail = true;
-  //     });
-  //   }
-  // }
-
-  // //Password Validation Function
-  // void passwordvalidation() async {
-  //   // RegExp pattern = RegExp(
-  //   //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-  //   if (passwordController.text.isNotEmpty) {
-  //     Navigator.pushAndRemoveUntil(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => MapsPage()),
-  //       (route) => false
-  //     );
-  //     // if (pattern.hasMatch(passwordController.text)) {
-  //     //   // Navigator.push(
-  //     //   //   context,
-  //     //   //   MaterialPageRoute(builder: (context) => const OTPVerifyPage()),
-  //     //   // );
-  //     //   // await http.post(Uri.parse(otpverification),
-  //     //   //     body: {"phoneNumber": phoneNumberController.text});
-  //     // } else {
-  //     //   setState(() {
-  //     //     errorTextPassword = 'Invalid Email Entered.';
-  //     //     isNotValidate1 = true;
-  //     //   });
-  //     // }
-  //     // TODO: Put Action Here After Password is Valid
-  //   } else {
-  //     setState(() {
-  //       errorTextPassword = 'Please Enter Your Password.';
-  //       isNotValidatePassword = true;
-  //     });
-  //   }
-  // }
-
   // Validation Function
   void validateInputs() async {
     // Email Validation
@@ -121,9 +62,8 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     var jsonResponse = jsonDecode(response.body);
     if (jsonResponse['status'] == true) {
-      var myToken = jsonResponse['token'];
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('token', myToken);
+      prefs.setString('token', jsonResponse['token']);
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const MapsPage(),

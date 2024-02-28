@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:washcube_rider_app/config.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
 import 'package:washcube_rider_app/src/features/screens/password%20reset/password_updated_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/textfield_theme.dart';
+import 'package:http/http.dart' as http;
 
 class ResetPassword extends StatefulWidget {
-  const ResetPassword({super.key});
+  final String email;
+
+  const ResetPassword(this.email, {super.key});
 
   @override
   State<ResetPassword> createState() => _ResetPasswordState();
@@ -22,59 +28,86 @@ class _ResetPasswordState extends State<ResetPassword> {
   String errorTextPassword1 = '';
 
   //Password Validation Function
-  void passwordvalidation() async {
-    // RegExp pattern = RegExp(
-    //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    if (newpasswordController.text.isNotEmpty) {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => const HomePage()),
-      // );
-      // if (pattern.hasMatch(passwordController.text)) {
-      //   // Navigator.push(
-      //   //   context,
-      //   //   MaterialPageRoute(builder: (context) => const OTPVerifyPage()),
-      //   // );
-      //   // await http.post(Uri.parse(otpverification),
-      //   //     body: {"phoneNumber": phoneNumberController.text});
-      // } else {
-      //   setState(() {
-      //     errorTextPassword = 'Invalid Email Entered.';
-      //     isNotValidate1 = true;
-      //   });
-      // }
-      isNotValidatePassword = false;
-      // TODO: Put Action Here After Password is Valid
+  void passwordValidation() {
+    String newPassword = newpasswordController.text;
+    String confirmPassword = confirmpasswordController.text;
+
+    // Define validation criteria for new password
+    RegExp uppercaseRegExp = RegExp(r'[A-Z]');
+    RegExp lowercaseRegExp = RegExp(r'[a-z]');
+    RegExp digitRegExp = RegExp(r'\d');
+    RegExp specialCharRegExp = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
+
+    if (newPassword.isNotEmpty) {
+      if (newPassword.length < 8) {
+        setState(() {
+          errorTextPassword = 'Password must be at least 8 characters long.';
+          isNotValidatePassword = true;
+        });
+      } else if (!uppercaseRegExp.hasMatch(newPassword)) {
+        setState(() {
+          errorTextPassword = 'Password must contain at least one uppercase letter.';
+          isNotValidatePassword = true;
+        });
+      } else if (!lowercaseRegExp.hasMatch(newPassword)) {
+        setState(() {
+          errorTextPassword = 'Password must contain at least one lowercase letter.';
+          isNotValidatePassword = true;
+        });
+      } else if (!digitRegExp.hasMatch(newPassword)) {
+        setState(() {
+          errorTextPassword = 'Password must contain at least one digit.';
+          isNotValidatePassword = true;
+        });
+      } else if (!specialCharRegExp.hasMatch(newPassword)) {
+        setState(() {
+          errorTextPassword = 'Password must contain at least one special character.';
+          isNotValidatePassword = true;
+        });
+      } else {
+        // New password is valid
+        setState(() {
+          errorTextPassword = '';
+          isNotValidatePassword = false;
+        });
+      }
     } else {
       setState(() {
         errorTextPassword = 'Please Enter Your Password.';
         isNotValidatePassword = true;
       });
     }
+
+    // Confirm password validation
+    if (newPassword != confirmPassword) {
+      setState(() {
+        errorTextPassword1 = 'Passwords do not match.';
+        isNotValidatePassword1 = true;
+      });
+    } else {
+      // Passwords match
+      setState(() {
+        errorTextPassword1 = '';
+        isNotValidatePassword1 = false;
+      });
+    }
+
+    if (!isNotValidatePassword && !isNotValidatePassword1) {
+      changePassword();
+    }
   }
 
   // Confirm Password Validation Function
-  void confirmpasswordvalidation() async {
-    if (confirmpasswordController.text.isNotEmpty) { //Check Whether Input is Empty
-      if (confirmpasswordController.text == newpasswordController.text) { //Check Input Match Above Text Field
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const PasswordUpdatedScreen()),
-          (route) => false,
-        );
-        isNotValidatePassword1 = false;
-      } else {
-        setState(() {
-          errorTextPassword1 = 'The Password Does Not Match';
-          isNotValidatePassword1 = true;
-        });
-      }
-      // TODO: Put Action Here After Password is Valid
-    } else {
-      setState(() {
-        errorTextPassword1 = 'Please Enter Your Password.';
-        isNotValidatePassword1 = true;
-      });
+  void changePassword() async {
+    var reqUrl = '${url}changePass';
+    var response = await http.post(Uri.parse(reqUrl),
+      body: {"email": widget.email, "newPassword": newpasswordController.text});
+    var jsonResponse = jsonDecode(response.body);
+    if (jsonResponse['status'] == 'Success') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const PasswordUpdatedScreen()),
+      );
     }
   }
 
@@ -179,8 +212,7 @@ class _ResetPasswordState extends State<ResetPassword> {
             //Confirm Button
             ElevatedButton(
               onPressed: () {
-                passwordvalidation();
-                confirmpasswordvalidation();
+                passwordValidation();
               },
               style: ElevatedButton.styleFrom(
                   minimumSize: const Size(500, cButtonHeight),

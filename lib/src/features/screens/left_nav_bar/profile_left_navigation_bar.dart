@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
 import 'package:washcube_rider_app/src/features/screens/job_history/history_page.dart';
 import 'package:washcube_rider_app/src/features/screens/profile/edit_profile_page.dart';
 import 'package:washcube_rider_app/src/features/screens/setting/system_settings_page.dart';
+import 'package:washcube_rider_app/src/features/screens/welcome/welcome_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 
 class LeftNavigationBar extends StatelessWidget {
@@ -115,9 +117,13 @@ class LeftNavigationBar extends StatelessWidget {
               ),
               title: Text('Log Out',
                   style: CTextTheme.whiteTextTheme.headlineMedium),
-              onTap: () {
-                // Update the state of the app
-                // ...
+              onTap: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.remove('token');
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const WelcomeScreen()),
+                );
               },
             ),
           ],
