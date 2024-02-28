@@ -1,4 +1,4 @@
-import './order.dart';
+import 'order.dart';
 
 enum JobType {
   lockerToLaundrySite,

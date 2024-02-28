@@ -1,4 +1,4 @@
-import '../models/user.dart';
+import 'user.dart';
 import 'package:intl/intl.dart';
 
 // DEFINE ORDER CLASS
