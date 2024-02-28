@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
-import 'package:washcube_rider_app/src/features/screens/id_rider/id_verification_screen.dart';
+import 'package:washcube_rider_app/src/features/screens/archive/id_rider/id_verification_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 
 class RiderEditProfilePage extends StatefulWidget {
@@ -25,7 +25,8 @@ class _RiderEditProfilePageState extends State<RiderEditProfilePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const IDVerificationScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const IDVerificationScreen()),
               );
             },
           ),
@@ -76,7 +77,8 @@ class _RiderEditProfilePageState extends State<RiderEditProfilePage> {
                         ),
                         color: AppColors.cGreyColor1,
                       ),
-                      child: const Icon(Icons.camera_alt_rounded, color: AppColors.cBlueColor3),
+                      child: const Icon(Icons.camera_alt_rounded,
+                          color: AppColors.cBlueColor3),
                     ),
                   ),
                 ],

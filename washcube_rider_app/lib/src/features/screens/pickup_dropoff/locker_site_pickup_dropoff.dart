@@ -1,11 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
-import 'package:washcube_rider_app/src/common_widgets/barcode_scan_widget.dart';
-import 'package:washcube_rider_app/src/common_widgets/help_widget.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
-import 'package:washcube_rider_app/src/features/screens/dropoff_laundrysite/laundrycenter_dropoff_screen.dart';
-import 'package:washcube_rider_app/src/features/screens/id_rider/id_verification_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 import '../locker_qr/locker_qr_screen.dart';
 import 'package:washcube_rider_app/config.dart';
@@ -22,7 +20,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:slidable_button/slidable_button.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart';
-import './laundry_site_pickup_dropoff.dart';
+import 'package:dots_indicator/dots_indicator.dart';
+import 'package:washcube_rider_app/src/features/screens/archive/dropoff_laundrysite/order_complete_screen.dart';
 
 class LockerPickupDropoff extends StatefulWidget {
   Job? activeJob;
@@ -40,6 +39,7 @@ class LockerPickupDropoff extends StatefulWidget {
 
 class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
   PageController _pageController = PageController(initialPage: 0);
+  int currentPage = 0;
   late List<String?> barcodeNum;
   late List<File?> imageFile;
   late List<String?> imageUrl;
@@ -76,10 +76,17 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
             return AlertDialog(
               title: Text(
                 widget.jobType == "Locker Pick Up"
-                    ? 'Pick Up Successful. Please proceed sending the laundry to the laundry site.'
-                    : 'Drop Off Successful. Job Completed. Hooray!',
+                    ? 'Pick Up Successful'
+                    : 'Drop Off Successful',
                 textAlign: TextAlign.center,
-                style: CTextTheme.blackTextTheme.headlineMedium,
+                style: CTextTheme.blackTextTheme.headlineLarge,
+              ),
+              content: Text(
+                widget.jobType == "Locker Pick Up"
+                    ? 'Please proceed sending the laundry to the laundry site.'
+                    : 'Job Completed. Hooray!',
+                textAlign: TextAlign.center,
+                style: CTextTheme.blackTextTheme.headlineSmall,
               ),
               actions: <Widget>[
                 Column(
@@ -108,16 +115,25 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
                                   Navigator.pushAndRemoveUntil(context,
                                       MaterialPageRoute(
                                           builder: (BuildContext context) {
-                                    return MapsPage();
+                                    return const MapsPage();
                                   }), (r) {
                                     return false;
                                   });
                                 } else if (widget.jobType ==
                                     "Locker Drop Off") {
+                                  // Navigator.pushAndRemoveUntil(context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (BuildContext context) {
+                                  //   return const MapsPage();
+                                  // }), (r) {
+                                  //   return false;
+                                  // });
                                   Navigator.pushAndRemoveUntil(context,
                                       MaterialPageRoute(
                                           builder: (BuildContext context) {
-                                    return MapsPage();
+                                    return OrderCompleteScreen(
+                                      activeJob: widget.activeJob,
+                                    );
                                   }), (r) {
                                     return false;
                                   });
@@ -239,15 +255,27 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Error'),
-              content: const Text(
-                  'The scanned barcode ID does not match the expected barcode ID. Please try again.'),
+              title: Text('Barcode Error',
+                  textAlign: TextAlign.center,
+                  style: CTextTheme.blackTextTheme.headlineLarge),
+              content: Text(
+                'The scanned barcode ID does not match the expected barcode ID. Please try again.',
+                textAlign: TextAlign.center,
+                style: CTextTheme.blackTextTheme.headlineSmall,
+              ),
               actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('OK'),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text('OK',
+                            style: CTextTheme.blackTextTheme.headlineSmall),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             );
@@ -257,32 +285,8 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
     }
   }
 
-  // Item List Data
-  final List<Map<String, dynamic>> items = [
-    {
-      'action': 'Apply Tag',
-      'scan': 'Scan',
-      'description': 'Apply tag & take photo',
-      'scanned': false,
-    },
-    {
-      'action': 'Scan Tag',
-      'scan': 'Scan',
-      'description': "Scan barcode's tag",
-      'scanned': false,
-    },
-  ];
-
-  // Handle barcode scan result
-  void _handleScanResult(int index, String result) {
-    setState(() {
-      items[index]['scanned'] = true;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -397,42 +401,43 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
             const SizedBox(height: 10.0),
             const Divider(),
             SizedBox(
-              height: 250.0,
+              height: 200.0,
               child: PageView.builder(
                 controller: _pageController,
                 itemCount: widget.activeJob?.orders.length ?? 0,
+                onPageChanged: (int page) {
+                  setState(() {
+                    currentPage = page;
+                  });
+                },
                 itemBuilder: (context, index) {
                   final Order order = widget.activeJob!.orders[index];
                   return Column(
                     children: [
+                      const SizedBox(height: 10.0),
+                      Text(
+                          'Order ${index + 1}/${widget.activeJob?.orders.length}',
+                          style: CTextTheme.blackTextTheme.headlineMedium),
+                      Text('Order Number: ${order.orderNumber}',
+                          style: CTextTheme.blackTextTheme.headlineSmall),
+                      if (widget.jobType == 'Locker Drop Off')
+                        Text(
+                            'Assigned Compartment: ${order.collectionSite?.compartmentNumber ?? 'Loading...'}',
+                            style: CTextTheme.blueTextTheme.headlineSmall),
+                      const SizedBox(height: 15.0),
                       ListTile(
                         leading: Image.asset(
                           barcodeNum[index] != null ? cDone : cTagDefault,
                           height: 50.0,
                           width: 50.0,
                         ),
-                        title: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Text(
-                            //   'Order #${index + 1}',
-                            //   style: CTextTheme.blackTextTheme.labelLarge,
-                            // ),
-                            Text(
-                              'Order No: ${order.orderNumber}',
-                              style: CTextTheme.blackTextTheme.labelLarge,
-                            ),
-                            const SizedBox(height: 5.0),
-                            Text(
-                              widget.jobType == "Locker Pick Up"
-                                  ? barcodeNum[index] != null
-                                      ? 'Barcode ID: ${barcodeNum[index]!}'
-                                      : ''
-                                  : 'Barcode ID: ${order.barcodeID}',
-                              style: CTextTheme.blackTextTheme.labelLarge,
-                            ),
-                          ],
+                        title: Text(
+                          widget.jobType == "Locker Pick Up"
+                              ? barcodeNum[index] != null
+                                  ? 'Barcode ID: ${barcodeNum[index]!}'
+                                  : 'Barcode ID: None'
+                              : 'Barcode ID: ${order.barcodeID}',
+                          style: CTextTheme.blackTextTheme.labelLarge,
                         ),
                         trailing: ElevatedButton(
                           onPressed: () => barcodeScanner(index),
@@ -461,12 +466,12 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
                                   ),
                               ],
                             ),
-                            title: const Column(
+                            title: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'Proof of Delivery',
-                                  style: TextStyle(fontSize: 13.0),
+                                  style: CTextTheme.blackTextTheme.labelLarge,
                                 ),
                               ],
                             ),
@@ -476,11 +481,10 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
                               child: ElevatedButton(
                                 onPressed: () =>
                                     launchCamera(ImageSource.camera, index),
-                                child: const Text('Take Photo',
+                                child: Text('Take Photo',
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                    )),
+                                    style:
+                                        CTextTheme.blackTextTheme.labelLarge),
                               ),
                             )),
                     ],
@@ -488,6 +492,21 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
                 },
               ),
             ),
+            // Page Indicator
+            const SizedBox(height: 10.0),
+            Center(
+              child: DotsIndicator(
+                dotsCount: widget.activeJob?.orders.length ?? 0,
+                position: currentPage,
+                decorator: DotsDecorator(
+                  color: Colors.grey[300]!,
+                  activeColor: Colors.blue,
+                  size: const Size.square(8.0),
+                  activeSize: const Size(20.0, 8.0),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10.0),
             const Divider(),
             const SizedBox(height: 20.0),
             //Picked Up Button
@@ -539,16 +558,31 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Text('Error'),
+                              title: Text('Error',
+                                  textAlign: TextAlign.center,
+                                  style:
+                                      CTextTheme.blackTextTheme.headlineLarge),
                               content: Text(
                                 'Please scan the tag ${widget.jobType == "Locker Pick Up" ? '' : 'and take picture for proof of delivery'} before proceeding to ${widget.jobType == "Locker Pick Up" ? 'pick up' : 'drop off'} the next order.',
+                                textAlign: TextAlign.center,
+                                style: CTextTheme.blackTextTheme.headlineSmall,
                               ),
                               actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('OK'),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          'OK',
+                                          style: CTextTheme
+                                              .blackTextTheme.headlineSmall,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             );

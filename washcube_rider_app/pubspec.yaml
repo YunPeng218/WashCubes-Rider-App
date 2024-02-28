@@ -47,6 +47,7 @@ dependencies:
   jwt_decoder:
   image_picker:
   slidable_button:
+  dots_indicator:
 
 dev_dependencies:
   flutter_test:

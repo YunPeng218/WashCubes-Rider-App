@@ -91,11 +91,19 @@ class OrderLockerDetails {
 
 class CollectionLockerDetails {
   final String lockerSiteId;
+  final String compartmentId;
+  final String compartmentNumber;
 
-  CollectionLockerDetails({required this.lockerSiteId});
+  CollectionLockerDetails(
+      {required this.lockerSiteId,
+      required this.compartmentId,
+      required this.compartmentNumber});
 
   factory CollectionLockerDetails.fromJson(Map<String, dynamic> json) {
-    return (CollectionLockerDetails(lockerSiteId: json['lockerSiteId'] ?? ''));
+    return (CollectionLockerDetails(
+        lockerSiteId: json['lockerSiteId'] ?? '',
+        compartmentId: json['compartmentId'] ?? '',
+        compartmentNumber: json['compartmentNumber'] ?? ''));
   }
 }
 

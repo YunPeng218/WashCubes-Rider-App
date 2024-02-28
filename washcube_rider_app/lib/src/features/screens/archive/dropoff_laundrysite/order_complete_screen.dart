@@ -47,7 +47,7 @@ class _OrderCompleteScreenState extends State<OrderCompleteScreen> {
               ),
               const SizedBox(height: 20.0),
               Text(
-                'Job ${widget.activeJob?.jobNumber} Completed!',
+                'Job Completed!',
                 style: CTextTheme.blackTextTheme.displaySmall,
                 textAlign: TextAlign.center,
               ),

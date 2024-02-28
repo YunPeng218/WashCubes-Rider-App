@@ -1,27 +1,25 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:washcube_rider_app/src/models/locker.dart';
 import 'package:washcube_rider_app/config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
+import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart';
 import 'package:washcube_rider_app/src/models/order.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart';
 import 'package:washcube_rider_app/src/common_widgets/two_option_alert.dart';
 
-class PickupOrderSelect extends StatefulWidget {
+class PickupLaundrySiteOrder extends StatefulWidget {
   final LockerSite? selectedLockerSite;
 
-  const PickupOrderSelect({super.key, required this.selectedLockerSite});
+  const PickupLaundrySiteOrder({super.key, required this.selectedLockerSite});
 
   @override
-  PickupOrderSelectState createState() => PickupOrderSelectState();
+  PickupLaundrySiteOrderState createState() => PickupLaundrySiteOrderState();
 }
 
-class PickupOrderSelectState extends State<PickupOrderSelect> {
+class PickupLaundrySiteOrderState extends State<PickupLaundrySiteOrder> {
   List<Order> ordersForPickup = [];
   List<String> selectedOrderIds = [];
 
@@ -34,7 +32,7 @@ class PickupOrderSelectState extends State<PickupOrderSelect> {
   Future<void> fetchPickupOrders() async {
     try {
       var reqUrl =
-          '${url}orders/ready-for-pickup?lockerSiteId=${widget.selectedLockerSite?.id}';
+          '${url}orders/ready-for-pickup/laundry-site?lockerSiteId=${widget.selectedLockerSite?.id}';
       final response = await http.get(Uri.parse(reqUrl));
 
       if (response.statusCode == 200) {
@@ -59,7 +57,7 @@ class PickupOrderSelectState extends State<PickupOrderSelect> {
     }
   }
 
-  void handleSelectOrdersButton() {
+  void handleSelectOrdersButton() async {
     if (selectedOrderIds.isEmpty) {
       showDialog(
         context: context,
@@ -121,12 +119,12 @@ class PickupOrderSelectState extends State<PickupOrderSelect> {
 
       Map<String, dynamic> data = {
         'selectedOrderIds': selectedOrderIds,
-        'jobType': 'Locker To Laundry Site',
+        'jobType': 'Laundry Site To Locker',
         'lockerSiteId': widget.selectedLockerSite?.id,
         'riderId': riderId,
       };
 
-      var reqUrl = '${url}orders/ready-for-pickup';
+      var reqUrl = '${url}orders/ready-for-pickup/laundry-site';
       final response = await http.post(Uri.parse(reqUrl),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(data));
@@ -202,7 +200,7 @@ class PickupOrderSelectState extends State<PickupOrderSelect> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('Select Orders to Pickup',
+            Text('Laundry Site to Locker Job',
                 style: CTextTheme.blueTextTheme.displaySmall),
             const SizedBox(
               height: 10.0,
@@ -225,7 +223,7 @@ class PickupOrderSelectState extends State<PickupOrderSelect> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Locker Site Selected:",
+                        Text("Drop Off Location:",
                             style: CTextTheme.blackTextTheme.labelLarge),
                         Text(widget.selectedLockerSite?.name ?? 'Loading...',
                             style: CTextTheme.blackTextTheme.headlineMedium),

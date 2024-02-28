@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:washcube_rider_app/src/features/screens/left_nav_bar/profile_left_navigation_bar.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
-import 'package:washcube_rider_app/src/features/screens/pickup_laundrysite/pickup_laundrysite_screen.dart';
-import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/locker_site_pickup_dropoff.dart';
+import 'package:washcube_rider_app/src/features/screens/pickup_dropoff/locker_site_pickup_dropoff.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:washcube_rider_app/src/models/job.dart';
 import 'package:washcube_rider_app/src/models/locker.dart';
@@ -16,10 +14,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:washcube_rider_app/config.dart';
 import 'package:washcube_rider_app/src/models/order.dart';
-import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/laundry_site_pickup_dropoff.dart';
-import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/select_locker_site_orders.dart';
+import 'package:washcube_rider_app/src/features/screens/pickup_dropoff/laundry_site_pickup_dropoff.dart';
+import 'package:washcube_rider_app/src/features/screens/pickup_dropoff/select_locker_site_orders.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
-import 'package:washcube_rider_app/src/features/screens/pickup_lockersite/select_laundry_site_orders.dart';
+import 'package:washcube_rider_app/src/features/screens/pickup_dropoff/select_laundry_site_orders.dart';
 
 class MapsPage extends StatefulWidget {
   const MapsPage({super.key});
@@ -517,6 +515,7 @@ class MapsPageState extends State<MapsPage> {
                 children: <Widget>[
                   Text(
                     'Select Pickup Location',
+                    textAlign: TextAlign.center,
                     style: CTextTheme.blackTextTheme.headlineLarge,
                   ),
                   ListView.builder(
@@ -563,6 +562,7 @@ class MapsPageState extends State<MapsPage> {
                 children: <Widget>[
                   Text(
                     'Select Drop Off Location',
+                    textAlign: TextAlign.center,
                     style: CTextTheme.blackTextTheme.headlineLarge,
                   ),
                   ListView.builder(
@@ -575,7 +575,7 @@ class MapsPageState extends State<MapsPage> {
                             child: LockerSiteOption(
                                 title: lockerSites[index].name,
                                 subtitle:
-                                    'Orders Ready For Drop Off: ${lockerPickupOrdersMap[lockerSites[index].id] ?? 'Loading...'}',
+                                    'Orders Ready For Drop Off: ${lockerDropoffOrdersMap[lockerSites[index].id] ?? 'Loading...'}',
                                 icon: Icons.location_on,
                                 onTap: () {
                                   handleLockerSiteSelection(lockerSites[index],
@@ -598,7 +598,8 @@ class MapsPageState extends State<MapsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const LeftNavigationBar(), // Drawer widget for the left navigation bar
+      drawer:
+          const LeftNavigationBar(), // Drawer widget for the left navigation bar
       body: SafeArea(
         child: Stack(
           children: [
@@ -609,14 +610,15 @@ class MapsPageState extends State<MapsPage> {
                 target: _currentLocation,
                 zoom: 14.0,
               ),
-              mapType: MapType.normal, // You can also change map type to satellite, hybrid, etc.
+              mapType: MapType
+                  .normal, // You can also change map type to satellite, hybrid, etc.
               markers: {
-                  Marker(
-                    markerId: const MarkerId('currentLocation'),
-                    position: _currentLocation,
-                    infoWindow: const InfoWindow(title: 'Your Location'),
-                  ),
-                },
+                Marker(
+                  markerId: const MarkerId('currentLocation'),
+                  position: _currentLocation,
+                  infoWindow: const InfoWindow(title: 'Your Location'),
+                ),
+              },
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -624,21 +626,21 @@ class MapsPageState extends State<MapsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //Menu Button
-                  Builder(
-                    builder: (context) {
-                      return IconButton(
-                        onPressed: () {
-                          Scaffold.of(context).openDrawer();
-                        }, 
-                        icon: const Icon(Icons.menu, color: AppColors.cBlackColor,),
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(
-                                  AppColors.cWhiteColor),
-                        ),
-                      );
-                    }
-                  ),
+                  Builder(builder: (context) {
+                    return IconButton(
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      icon: const Icon(
+                        Icons.menu,
+                        color: AppColors.cBlackColor,
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                            AppColors.cWhiteColor),
+                      ),
+                    );
+                  }),
                   //Status Switch
                   ElevatedButton(
                     onPressed: null,
