@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:washcube_rider_app/config.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
 import 'package:washcube_rider_app/src/features/screens/job_history/history_page.dart';
@@ -7,9 +11,45 @@ import 'package:washcube_rider_app/src/features/screens/profile/edit_profile_pag
 import 'package:washcube_rider_app/src/features/screens/setting/system_settings_page.dart';
 import 'package:washcube_rider_app/src/features/screens/welcome/welcome_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
+import 'package:http/http.dart' as http;
 
-class LeftNavigationBar extends StatelessWidget {
+class LeftNavigationBar extends StatefulWidget {
   const LeftNavigationBar({super.key});
+
+  @override
+  _LeftNavigationBarState createState() => _LeftNavigationBarState();
+}
+
+class _LeftNavigationBarState extends State<LeftNavigationBar> {
+  Map<String, dynamic> riderDetails = {};
+
+  @override
+  void initState() {
+    super.initState();
+    getRiderDetails();
+  }
+
+  Future<void> getRiderDetails() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token') ?? '';
+      Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token);
+      var reqUrl = '${url}rider?riderId=${jwtDecodedToken["_id"]}';
+      final response = await http.get(
+        Uri.parse(reqUrl),
+      );
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        setState(() {
+          riderDetails = data['rider'];
+        });
+      } else {
+        print('Failed to load rider details');
+      }
+    } catch (error) {
+      print('Error fetching rider details: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +70,17 @@ class LeftNavigationBar extends StatelessWidget {
               },
               child: UserAccountsDrawerHeader(
                 accountName: Text(
-                  "Darren Lee",
+                  riderDetails['name'] ?? "",
                   style: CTextTheme.whiteTextTheme.headlineLarge,
                 ),
-                accountEmail: Text("darren9612@gmail.com",
-                    style: CTextTheme.greyTextTheme.headlineSmall),
-                currentAccountPicture: const CircleAvatar(
-                  backgroundImage: AssetImage(cRiderPFP),
+                accountEmail: Text(
+                  riderDetails['email'] ?? "",
+                  style: CTextTheme.greyTextTheme.headlineSmall,
+                ),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: riderDetails['profilePicURL']!=null
+                    ? NetworkImage(riderDetails['profilePicURL'])
+                    : const AssetImage(cRiderPFP) as ImageProvider<Object>,
                 ),
                 decoration: const BoxDecoration(
                   color: AppColors.cBarColor,

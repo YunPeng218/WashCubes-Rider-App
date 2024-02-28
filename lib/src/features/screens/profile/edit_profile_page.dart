@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:washcube_rider_app/config.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/image_strings.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
 import 'package:washcube_rider_app/src/features/screens/archive/id_rider/id_verification_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
+import 'package:http/http.dart' as http;
 
 class RiderEditProfilePage extends StatefulWidget {
   const RiderEditProfilePage({super.key});
@@ -13,6 +19,76 @@ class RiderEditProfilePage extends StatefulWidget {
 }
 
 class _RiderEditProfilePageState extends State<RiderEditProfilePage> {
+  Map<String, dynamic> riderDetails = {};
+
+  @override
+  void initState() {
+    super.initState();
+    getRiderDetails();
+  }
+
+  Future<void> getRiderDetails() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('token') ?? '';
+      Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(token);
+      var reqUrl = '${url}rider?riderId=${jwtDecodedToken["_id"]}';
+      final response = await http.get(
+        Uri.parse(reqUrl),
+      );
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        setState(() {
+          riderDetails = data['rider'];
+        });
+      } else {
+        print('Failed to load rider details');
+      }
+    } catch (error) {
+      print('Error fetching rider details: $error');
+    }
+  }
+
+void showEditDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Making edits? Reach out to our Admin Hotline to make changes.',
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+              },
+              child: Text('Contact Admin Hotline'),
+            ),
+            const SizedBox(height: 30),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,9 +132,11 @@ class _RiderEditProfilePageState extends State<RiderEditProfilePage> {
                         ),
                       ],
                       shape: BoxShape.circle,
-                      image: const DecorationImage(
+                      image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage(cRiderPFP),
+                        image: riderDetails['profilePicURL']!=null
+                          ? NetworkImage(riderDetails['profilePicURL'])
+                          : const AssetImage(cRiderPFP) as ImageProvider<Object>,
                       ),
                     ),
                   ),
@@ -66,19 +144,23 @@ class _RiderEditProfilePageState extends State<RiderEditProfilePage> {
                   Positioned(
                     bottom: 0,
                     right: 0,
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          width: 4,
+                    child: GestureDetector(
+                      onTap: () {
+                        showEditDialog(context);
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            width: 4,
+                            color: AppColors.cGreyColor1,
+                          ),
                           color: AppColors.cGreyColor1,
                         ),
-                        color: AppColors.cGreyColor1,
+                        child: const Icon(Icons.camera_alt_rounded, color: AppColors.cBlueColor3),
                       ),
-                      child: const Icon(Icons.camera_alt_rounded,
-                          color: AppColors.cBlueColor3),
                     ),
                   ),
                 ],
@@ -99,14 +181,14 @@ class _RiderEditProfilePageState extends State<RiderEditProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Darren Lee',
+                      riderDetails['name'] ?? "",
                       style: CTextTheme.blackTextTheme.headlineLarge,
                     ),
                     IconButton(
                       icon: const Icon(Icons.edit_outlined,
                           color: AppColors.cGreyColor2),
                       onPressed: () {
-                        // showEditDialog(context, widget.title, widget.value);
+                        showEditDialog(context);
                       },
                     ),
                   ],
@@ -127,14 +209,14 @@ class _RiderEditProfilePageState extends State<RiderEditProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '+60 19-906 0912',
+                      riderDetails['phoneNumber'].toString(),
                       style: CTextTheme.blackTextTheme.headlineLarge,
                     ),
                     IconButton(
                       icon: const Icon(Icons.edit_outlined,
                           color: AppColors.cGreyColor2),
                       onPressed: () {
-                        // showEditDialog(context, widget.title, widget.value);
+                        showEditDialog(context);
                       },
                     ),
                   ],
@@ -155,14 +237,14 @@ class _RiderEditProfilePageState extends State<RiderEditProfilePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'darren9612@gmail.com',
+                      riderDetails['email'] ?? "",
                       style: CTextTheme.blackTextTheme.headlineLarge,
                     ),
                     IconButton(
                       icon: const Icon(Icons.edit_outlined,
                           color: AppColors.cGreyColor2),
                       onPressed: () {
-                        // showEditDialog(context, widget.title, widget.value);
+                        showEditDialog(context);
                       },
                     ),
                   ],
@@ -170,32 +252,9 @@ class _RiderEditProfilePageState extends State<RiderEditProfilePage> {
                 const Divider(),
               ],
             ),
-            // buildTextField("PREFERRED NAME", "Darren Lee", false),
-            // buildTextField("MOBILE NUMBER", "+60 19-906 0912", false),
-            // buildTextField("EMAIL ADDRESS", "darren9612@gmail.com", false),
           ],
         ),
       ),
     );
   }
-
-  // Widget buildTextField(String labelText, String placeholder, bool isPasswordTextField) {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(bottom: 35.0),
-  //     child: TextField(
-  //       enabled: false,
-  //       decoration: InputDecoration(
-  //         contentPadding: EdgeInsets.only(bottom: 3),
-  //         labelText: labelText,
-  //         floatingLabelBehavior: FloatingLabelBehavior.always,
-  //         hintText: placeholder,
-  //         hintStyle: TextStyle(
-  //           fontSize: 16,
-  //           fontWeight: FontWeight.bold,
-  //           color: Colors.black,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }

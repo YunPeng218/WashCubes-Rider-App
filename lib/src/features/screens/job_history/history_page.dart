@@ -51,37 +51,6 @@ class _HistoryPageState extends State<HistoryPage> {
                   icon: const Icon(Icons.access_time, color: AppColors.cBlueColor3,),),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                //Hour Pie Chart
-                Column(
-                  children: [
-                    SizedBox(
-                      width: 150,
-                      height: 150,
-                      child: PieChart(
-                        PieChartData(
-                          sections: [
-                            PieChartSectionData(
-                              value: 300,
-                              title: '300',
-                              color: AppColors.cBlueColor2,
-                              radius: 50,
-                            ),
-                            PieChartSectionData(
-                              value: 1700,
-                              color: AppColors.cGreyColor1,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Text('Hours', style: CTextTheme.blackTextTheme.headlineMedium,),
-                  ],
-                ),
-              ],
-            ),
             const Divider(),
             //Task List
             ListView.builder(
