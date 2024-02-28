@@ -19,28 +19,40 @@ class LeftNavigationBar extends StatelessWidget {
           children: <Widget>[
             //Account Profile Section
             TextButton(
-              onPressed: (){
+              onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const RiderEditProfilePage()),
-                );}, 
-                child: UserAccountsDrawerHeader(
-                  accountName: Text("Darren Lee", style: CTextTheme.whiteTextTheme.headlineLarge,),
-                  accountEmail: Text("darren9612@gmail.com", style: CTextTheme.greyTextTheme.headlineSmall),
-                  currentAccountPicture: const CircleAvatar(
-                    backgroundImage: AssetImage(cRiderPFP),
-                  ),
-                  decoration: const BoxDecoration(
-                    color: AppColors.cBarColor,
-                  ),
-                ),),
+                  MaterialPageRoute(
+                      builder: (context) => const RiderEditProfilePage()),
+                );
+              },
+              child: UserAccountsDrawerHeader(
+                accountName: Text(
+                  "Darren Lee",
+                  style: CTextTheme.whiteTextTheme.headlineLarge,
+                ),
+                accountEmail: Text("darren9612@gmail.com",
+                    style: CTextTheme.greyTextTheme.headlineSmall),
+                currentAccountPicture: const CircleAvatar(
+                  backgroundImage: AssetImage(cRiderPFP),
+                ),
+                decoration: const BoxDecoration(
+                  color: AppColors.cBarColor,
+                ),
+              ),
+            ),
             //Anouncement Tab
             ListTile(
-              leading: const Icon(Icons.notifications_none_rounded, color: AppColors.cWhiteColor,),
-              title: Text('Announcement', style: CTextTheme.whiteTextTheme.headlineMedium),
+              leading: const Icon(
+                Icons.notifications_none_rounded,
+                color: AppColors.cWhiteColor,
+              ),
+              title: Text('Announcement',
+                  style: CTextTheme.whiteTextTheme.headlineMedium),
               //New Content Chip
               trailing: Chip(
-                label: Text('1', style: CTextTheme.whiteTextTheme.headlineSmall),
+                label:
+                    Text('1', style: CTextTheme.whiteTextTheme.headlineSmall),
                 backgroundColor: Colors.blue,
               ),
               onTap: () {
@@ -51,8 +63,12 @@ class LeftNavigationBar extends StatelessWidget {
             ),
             //History Tab
             ListTile(
-              leading: const Icon(Icons.history, color: AppColors.cWhiteColor,),
-              title: Text('History', style: CTextTheme.whiteTextTheme.headlineMedium),
+              leading: const Icon(
+                Icons.history,
+                color: AppColors.cWhiteColor,
+              ),
+              title: Text('History',
+                  style: CTextTheme.whiteTextTheme.headlineMedium),
               onTap: () {
                 // Update the state of the app
                 Navigator.push(
@@ -63,8 +79,12 @@ class LeftNavigationBar extends StatelessWidget {
             ),
             //Support Tab
             ListTile(
-              leading: const Icon(Icons.headset_mic_outlined, color: AppColors.cWhiteColor,),
-              title: Text('Support', style: CTextTheme.whiteTextTheme.headlineMedium),
+              leading: const Icon(
+                Icons.headset_mic_outlined,
+                color: AppColors.cWhiteColor,
+              ),
+              title: Text('Support',
+                  style: CTextTheme.whiteTextTheme.headlineMedium),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -72,20 +92,29 @@ class LeftNavigationBar extends StatelessWidget {
             ),
             //Settings Tab
             ListTile(
-              leading: const Icon(Icons.settings_outlined, color: AppColors.cWhiteColor,),
-              title: Text('Settings', style: CTextTheme.whiteTextTheme.headlineMedium),
+              leading: const Icon(
+                Icons.settings_outlined,
+                color: AppColors.cWhiteColor,
+              ),
+              title: Text('Settings',
+                  style: CTextTheme.whiteTextTheme.headlineMedium),
               onTap: () {
                 // Update the state of the app
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SystemSettingsPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const SystemSettingsPage()),
                 );
               },
             ),
             //Log Out Tab
             ListTile(
-              leading: const Icon(Icons.logout, color: AppColors.cWhiteColor,),
-              title: Text('Log Out', style: CTextTheme.whiteTextTheme.headlineMedium),
+              leading: const Icon(
+                Icons.logout,
+                color: AppColors.cWhiteColor,
+              ),
+              title: Text('Log Out',
+                  style: CTextTheme.whiteTextTheme.headlineMedium),
               onTap: () {
                 // Update the state of the app
                 // ...

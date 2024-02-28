@@ -4,6 +4,10 @@ import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart
 import 'package:washcube_rider_app/src/features/screens/password%20reset/email_input_screen.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/textfield_theme.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:washcube_rider_app/config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,61 +26,143 @@ class _LoginScreenState extends State<LoginScreen> {
   String errorTextPassword = '';
 
   //Email Validation Function
-  void emailvalidation() async {
-    RegExp pattern = RegExp(
+  // void emailvalidation() async {
+  //   RegExp pattern = RegExp(
+  //       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  //   if (emailController.text.isNotEmpty) {
+  //     if (pattern.hasMatch(emailController.text)) {
+  //       // Navigator.push(
+  //       //   context,
+  //       //   MaterialPageRoute(builder: (context) => const OTPVerifyPage()),
+  //       // );
+  //       // await http.post(Uri.parse(otpverification),
+  //       //     body: {"phoneNumber": phoneNumberController.text});
+  //       // TODO: Put Action Here After Email is Valid
+  //     } else {
+  //       setState(() {
+  //         errorTextEmail = 'Invalid Email Entered.';
+  //         isNotValidateEmail = true;
+  //       });
+  //     }
+  //   } else {
+  //     setState(() {
+  //       errorTextEmail = 'Please Enter Your Email.';
+  //       isNotValidateEmail = true;
+  //     });
+  //   }
+  // }
+
+  // //Password Validation Function
+  // void passwordvalidation() async {
+  //   // RegExp pattern = RegExp(
+  //   //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+  //   if (passwordController.text.isNotEmpty) {
+  //     Navigator.pushAndRemoveUntil(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => MapsPage()),
+  //       (route) => false
+  //     );
+  //     // if (pattern.hasMatch(passwordController.text)) {
+  //     //   // Navigator.push(
+  //     //   //   context,
+  //     //   //   MaterialPageRoute(builder: (context) => const OTPVerifyPage()),
+  //     //   // );
+  //     //   // await http.post(Uri.parse(otpverification),
+  //     //   //     body: {"phoneNumber": phoneNumberController.text});
+  //     // } else {
+  //     //   setState(() {
+  //     //     errorTextPassword = 'Invalid Email Entered.';
+  //     //     isNotValidate1 = true;
+  //     //   });
+  //     // }
+  //     // TODO: Put Action Here After Password is Valid
+  //   } else {
+  //     setState(() {
+  //       errorTextPassword = 'Please Enter Your Password.';
+  //       isNotValidatePassword = true;
+  //     });
+  //   }
+  // }
+
+  // Validation Function
+  void validateInputs() async {
+    // Email Validation
+    RegExp emailPattern = RegExp(
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    if (emailController.text.isNotEmpty) {
-      if (pattern.hasMatch(emailController.text)) {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => const OTPVerifyPage()),
-        // );
-        // await http.post(Uri.parse(otpverification),
-        //     body: {"phoneNumber": phoneNumberController.text});
-        // TODO: Put Action Here After Email is Valid
-      } else {
-        setState(() {
-          errorTextEmail = 'Invalid Email Entered.';
-          isNotValidateEmail = true;
-        });
-      }
-    } else {
+    if (emailController.text.isEmpty) {
       setState(() {
         errorTextEmail = 'Please Enter Your Email.';
         isNotValidateEmail = true;
       });
+      return;
+    } else if (!emailPattern.hasMatch(emailController.text)) {
+      setState(() {
+        errorTextEmail = 'Invalid Email Entered.';
+        isNotValidateEmail = true;
+      });
+      return;
     }
-  }
-
-  //Password Validation Function
-  void passwordvalidation() async {
-    // RegExp pattern = RegExp(
-    //     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-    if (passwordController.text.isNotEmpty) {
-      Navigator.pushAndRemoveUntil(
-        context, 
-        MaterialPageRoute(builder: (context) => MapsPage()), 
-        (route) => false
-      );
-      // if (pattern.hasMatch(passwordController.text)) {
-      //   // Navigator.push(
-      //   //   context,
-      //   //   MaterialPageRoute(builder: (context) => const OTPVerifyPage()),
-      //   // );
-      //   // await http.post(Uri.parse(otpverification),
-      //   //     body: {"phoneNumber": phoneNumberController.text});
-      // } else {
-      //   setState(() {
-      //     errorTextPassword = 'Invalid Email Entered.';
-      //     isNotValidate1 = true;
-      //   });
-      // }
-      // TODO: Put Action Here After Password is Valid
-    } else {
+    // Password Validation
+    if (passwordController.text.isEmpty) {
       setState(() {
         errorTextPassword = 'Please Enter Your Password.';
         isNotValidatePassword = true;
       });
+      return;
+    }
+    loginRider();
+  }
+
+  void loginRider() async {
+    var reqUrl = '${url}loginRider';
+    var response = await http.post(Uri.parse(reqUrl), body: {
+      "email": emailController.text,
+      "password": passwordController.text
+    });
+    var jsonResponse = jsonDecode(response.body);
+    if (jsonResponse['status'] == true) {
+      var myToken = jsonResponse['token'];
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', myToken);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const MapsPage(),
+          ),
+          (Route<dynamic> route) => false);
+    } else if (jsonResponse!['status'] == false) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Invalid Credentials',
+                textAlign: TextAlign.center,
+                style: CTextTheme.blackTextTheme.headlineLarge),
+            content: Text(
+              'The credentials entered are incorrect. Please try again.',
+              textAlign: TextAlign.center,
+              style: CTextTheme.blackTextTheme.headlineSmall,
+            ),
+            actions: [
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Close the dialog
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'OK',
+                        style: CTextTheme.blackTextTheme.headlineSmall,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 
@@ -118,7 +204,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: cDefaultSize,),
+            const SizedBox(
+              height: cDefaultSize,
+            ),
             //Password Text Form
             Theme(
               //Implementing Text Form Field Styling
@@ -140,19 +228,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         FloatingLabelBehavior.always, //Keeps Label Float Atop
                     errorText: isNotValidatePassword ? errorTextPassword : null,
                     suffixIcon: GestureDetector(
-                      onLongPressStart: (_) { //When User Hold the Icon
+                      onLongPressStart: (_) {
+                        //When User Hold the Icon
                         setState(() {
                           _isObscure = !_isObscure;
                         });
                       },
-                      onLongPressEnd: (_) { //When User Let Go the Icon
+                      onLongPressEnd: (_) {
+                        //When User Let Go the Icon
                         setState(() {
                           _isObscure = !_isObscure;
                         });
                       },
                       child: Icon(
-                        //If Obscure=true, use visibility_off icon, else use visibility icon 
-                        _isObscure ? Icons.visibility_off : Icons.visibility, 
+                        //If Obscure=true, use visibility_off icon, else use visibility icon
+                        _isObscure ? Icons.visibility_off : Icons.visibility,
                       ),
                     ),
                   ),
@@ -164,10 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             //Log In Button
             ElevatedButton(
-              onPressed: () {
-                emailvalidation();
-                passwordvalidation();
-              },
+              onPressed: validateInputs,
               style: ElevatedButton.styleFrom(
                   minimumSize: const Size(500, cButtonHeight),
                   maximumSize: const Size(1000, cButtonHeight)),
@@ -181,7 +268,8 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const EmailInputScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const EmailInputScreen()),
                 );
               },
               child: Text(

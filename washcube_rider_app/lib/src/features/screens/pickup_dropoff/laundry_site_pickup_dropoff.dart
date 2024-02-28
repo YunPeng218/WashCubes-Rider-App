@@ -20,19 +20,20 @@ import 'package:washcube_rider_app/src/features/screens/archive/dropoff_laundrys
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/textfield_theme.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
 
-class Site extends StatefulWidget {
+class SitePickupDropoff extends StatefulWidget {
   Job? activeJob;
   LockerSite? activeJobLocation;
   final String jobType;
 
-  Site(this.activeJob, this.activeJobLocation, this.jobType, {Key? key})
+  SitePickupDropoff(this.activeJob, this.activeJobLocation, this.jobType,
+      {Key? key})
       : super(key: key);
 
   @override
-  State<Site> createState() => _SiteState();
+  State<SitePickupDropoff> createState() => _SitePickupDropoffState();
 }
 
-class _SiteState extends State<Site> {
+class _SitePickupDropoffState extends State<SitePickupDropoff> {
   late List<String?> barcodeNum;
   TextEditingController receiverNameController = TextEditingController();
   TextEditingController receiverICController = TextEditingController();

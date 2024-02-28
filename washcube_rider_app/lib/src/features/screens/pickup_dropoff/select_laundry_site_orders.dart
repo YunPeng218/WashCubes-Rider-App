@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:washcube_rider_app/src/models/locker.dart';
 import 'package:washcube_rider_app/config.dart';
@@ -10,16 +12,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:washcube_rider_app/src/common_widgets/two_option_alert.dart';
 
-class PickupLaundrySiteOrder extends StatefulWidget {
+class LaundrySitePickupOrderSelect extends StatefulWidget {
   final LockerSite? selectedLockerSite;
 
-  const PickupLaundrySiteOrder({super.key, required this.selectedLockerSite});
+  const LaundrySitePickupOrderSelect(
+      {super.key, required this.selectedLockerSite});
 
   @override
-  PickupLaundrySiteOrderState createState() => PickupLaundrySiteOrderState();
+  LaundrySitePickupOrderSelectState createState() =>
+      LaundrySitePickupOrderSelectState();
 }
 
-class PickupLaundrySiteOrderState extends State<PickupLaundrySiteOrder> {
+class LaundrySitePickupOrderSelectState
+    extends State<LaundrySitePickupOrderSelect> {
   List<Order> ordersForPickup = [];
   List<String> selectedOrderIds = [];
 
@@ -132,54 +137,178 @@ class PickupLaundrySiteOrderState extends State<PickupLaundrySiteOrder> {
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
 
-        if (data.containsKey('newJobNumber')) {
-          final jobNumber = data['newJobNumber'];
+        if (data.containsKey('jobNumber') &&
+            data.containsKey('unavailableOrders')) {
+          final jobNumber = data['jobNumber'];
+          List<String> unavailableOrders =
+              (data['unavailableOrders'] as List<dynamic>)
+                  .map((item) => item.toString())
+                  .toList();
 
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(
-                  'Job Successfully Created',
-                  textAlign: TextAlign.center,
-                  style: CTextTheme.blackTextTheme.headlineLarge,
-                ),
-                content: Text(
-                  'Your Job Number is #$jobNumber',
-                  textAlign: TextAlign.center,
-                  style: CTextTheme.blackTextTheme.headlineSmall,
-                ),
-                actions: <Widget>[
-                  //Row & Expanded Widget For Button Centering
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              child: Text(
-                                'Nice!',
-                                style: CTextTheme.blackTextTheme.headlineSmall,
+          print(unavailableOrders);
+          Navigator.pop(context);
+
+          if (jobNumber == 'Unavailable' && unavailableOrders.isNotEmpty) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text(
+                    'Order Selection Error',
+                    textAlign: TextAlign.center,
+                    style: CTextTheme.blackTextTheme.headlineLarge,
+                  ),
+                  content: Text(
+                    'Sorry! We were unable to allocate suitable compartments for any of your selected orders. Please re-select another set of orders',
+                    textAlign: TextAlign.center,
+                    style: CTextTheme.blackTextTheme.headlineSmall,
+                  ),
+                  actions: <Widget>[
+                    //Row & Expanded Widget For Button Centering
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                child: Text(
+                                  'OK',
+                                  style:
+                                      CTextTheme.blackTextTheme.headlineSmall,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
                               ),
-                              onPressed: () {
-                                Navigator.pushAndRemoveUntil(context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) {
-                                  return MapsPage();
-                                }), (r) {
-                                  return false;
-                                });
-                              },
                             ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
+          } else if (unavailableOrders.isNotEmpty) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text(
+                    'Job Successfully Created',
+                    textAlign: TextAlign.center,
+                    style: CTextTheme.blackTextTheme.headlineLarge,
+                  ),
+                  content: SingleChildScrollView(
+                    child: SizedBox(
+                      height: 150, // Adjust the height as needed
+                      child: Column(
+                        children: [
+                          Text(
+                            'Your Job Number is #$jobNumber',
+                            textAlign: TextAlign.center,
+                            style: CTextTheme.blackTextTheme.headlineSmall,
+                          ),
+                          const SizedBox(height: 10.0),
+                          Text(
+                            'We have removed the following orders from your job as we were unable to assign suitable compartments: ',
+                            textAlign: TextAlign.center,
+                            style: CTextTheme.blackTextTheme.headlineSmall,
+                          ),
+                          const SizedBox(height: 15.0),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: unavailableOrders.map((orderNumber) {
+                              return Text(
+                                'Order #$orderNumber',
+                                style: CTextTheme.blackTextTheme.headlineMedium,
+                              );
+                            }).toList(),
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ],
-              );
-            },
-          );
+                  actions: <Widget>[
+                    //Row & Expanded Widget For Button Centering
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                child: Text(
+                                  'OK',
+                                  style:
+                                      CTextTheme.blackTextTheme.headlineSmall,
+                                ),
+                                onPressed: () {
+                                  Navigator.pushAndRemoveUntil(context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) {
+                                    return const MapsPage();
+                                  }), (r) {
+                                    return false;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text(
+                    'Job Successfully Created',
+                    textAlign: TextAlign.center,
+                    style: CTextTheme.blackTextTheme.headlineLarge,
+                  ),
+                  content: Text(
+                    'Your Job Number is #$jobNumber',
+                    textAlign: TextAlign.center,
+                    style: CTextTheme.blackTextTheme.headlineSmall,
+                  ),
+                  actions: <Widget>[
+                    //Row & Expanded Widget For Button Centering
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                child: Text(
+                                  'Nice!',
+                                  style:
+                                      CTextTheme.blackTextTheme.headlineSmall,
+                                ),
+                                onPressed: () {
+                                  Navigator.pushAndRemoveUntil(context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) {
+                                    return MapsPage();
+                                  }), (r) {
+                                    return false;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
+          }
         } else {
           print('SERVER ERROR: Error confirming pickup orders');
         }

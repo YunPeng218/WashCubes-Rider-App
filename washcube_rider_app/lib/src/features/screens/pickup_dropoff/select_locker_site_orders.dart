@@ -12,16 +12,16 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:washcube_rider_app/src/features/screens/location/map_screen.dart';
 import 'package:washcube_rider_app/src/common_widgets/two_option_alert.dart';
 
-class PickupOrderSelect extends StatefulWidget {
+class LockerPickupOrderSelect extends StatefulWidget {
   final LockerSite? selectedLockerSite;
 
-  const PickupOrderSelect({super.key, required this.selectedLockerSite});
+  const LockerPickupOrderSelect({super.key, required this.selectedLockerSite});
 
   @override
-  PickupOrderSelectState createState() => PickupOrderSelectState();
+  LockerPickupOrderSelectState createState() => LockerPickupOrderSelectState();
 }
 
-class PickupOrderSelectState extends State<PickupOrderSelect> {
+class LockerPickupOrderSelectState extends State<LockerPickupOrderSelect> {
   List<Order> ordersForPickup = [];
   List<String> selectedOrderIds = [];
 
