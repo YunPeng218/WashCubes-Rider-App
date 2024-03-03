@@ -181,7 +181,7 @@ void showEditDialog(BuildContext context) {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      riderDetails['name'] ?? "",
+                      riderDetails['name'] ?? "Loading...",
                       style: CTextTheme.blackTextTheme.headlineLarge,
                     ),
                     IconButton(
@@ -209,7 +209,9 @@ void showEditDialog(BuildContext context) {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      riderDetails['phoneNumber'].toString(),
+                        riderDetails['phoneNumber'] != null
+                          ? riderDetails['phoneNumber'].toString()
+                          : "Loading...",
                       style: CTextTheme.blackTextTheme.headlineLarge,
                     ),
                     IconButton(
@@ -237,7 +239,7 @@ void showEditDialog(BuildContext context) {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      riderDetails['email'] ?? "",
+                      riderDetails['email'] ?? "Loading...",
                       style: CTextTheme.blackTextTheme.headlineLarge,
                     ),
                     IconButton(

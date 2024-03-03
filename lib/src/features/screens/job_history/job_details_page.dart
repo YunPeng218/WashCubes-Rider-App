@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:washcube_rider_app/src/constants/colors.dart';
 import 'package:washcube_rider_app/src/constants/sizes.dart';
-import 'package:washcube_rider_app/src/features/screens/job_history/job_detail_dropoff.dart';
-import 'package:washcube_rider_app/src/features/screens/job_history/job_detail_pickup.dart';
 import 'package:washcube_rider_app/src/utilities/theme/widget_themes/text_theme.dart';
 
 class JobDetailsPage extends StatelessWidget {
-  JobDetailsPage({super.key});
+  final Map<String, dynamic> job;
+  final Map<String, dynamic> jobLocker;
 
-  // Item List Data
-  final List<Map<String, dynamic>> items = [
-    {'location': 'Sunway Geo Residences', 'address': 'Persiaran Tasik Timur, Sunway South Quay, Bandar Sunway, 47500 Subang Jaya, Selangor', 'pageroute': const PickupJobDetailScreen(),},
-    {'location': "Taylor's University", 'address': "1, Jln Taylors, 47500 Subang Jaya, Selangor", 'pageroute': const PickupJobDetailScreen(),},
-    {'location': "i3 Laundry Centre", 'address': "Persiaran Tasik Timur, Sunway South Quay, Bandar Sunway, 47500 Subang Jaya, Selangor", 'pageroute': const DropoffJobDetailScreen(),},
-  ];
+  JobDetailsPage({required this.job, required this.jobLocker, Key? key}) : super(key: key);
+
+  String getFormattedDateTime(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    final timeZoneOffset = Duration(hours: 8);
+    dateTime = dateTime.add(timeZoneOffset);
+    String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
+    String formattedTime = DateFormat('HH:mm').format(dateTime);
+    return '$formattedDate, $formattedTime';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Job Details', style: CTextTheme.blackTextTheme.displaySmall,),
+        title: Text('Job Details', style: CTextTheme.blackTextTheme.displaySmall),
         centerTitle: true,
       ),
       body: Padding(
@@ -28,76 +32,116 @@ class JobDetailsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Order ID: #9612',
+              "Job Number: ${job['jobNumber']}",
               style: CTextTheme.blackTextTheme.displaySmall,
             ),
             const SizedBox(height: cDefaultSize),
             Row(
               children: [
-                Text('Date', style: CTextTheme.greyTextTheme.headlineMedium,),
-                const SizedBox(width: cDefaultSize,),
+                Text('Job Status', style: CTextTheme.greyTextTheme.headlineMedium),
+                const SizedBox(width: cDefaultSize),
                 Text(
-                  '23 Nov 2023, 22:13',
+                  job['isJobActive'] == true? 'In Process' : 'Completed',
+                  style: job['isJobActive'] == true
+                      ? CTextTheme.blueTextTheme.headlineMedium
+                      : CTextTheme.blackTextTheme.headlineMedium,
+                ),
+              ],
+            ),
+            const SizedBox(height: cDefaultSize),
+            Row(
+              children: [
+                Text('Job Type', style: CTextTheme.greyTextTheme.headlineMedium),
+                const SizedBox(width: cDefaultSize),
+                Text(
+                  "${job['jobType']}",
+                  style: CTextTheme.blackTextTheme.headlineMedium,
+                ),
+              ],
+            ),
+            const SizedBox(height: cDefaultSize),
+            Row(
+              children: [
+                Text('Number of Order', style: CTextTheme.greyTextTheme.headlineMedium),
+                const SizedBox(width: cDefaultSize),
+                Text(
+                  "${job['orders'].length}",
+                  style: CTextTheme.blackTextTheme.headlineMedium,
+                ),
+              ],
+            ),
+            const SizedBox(height: cDefaultSize),
+            Row(
+              children: [
+                Text('Date', style: CTextTheme.greyTextTheme.headlineMedium),
+                const SizedBox(width: cDefaultSize),
+                Text(
+                  getFormattedDateTime(job['createdAt']),
                   style: CTextTheme.blackTextTheme.headlineMedium,
                 ),
               ],
             ),
             const SizedBox(height: 8),
+            const Divider(),
             Row(
               children: [
-                Text('Location', style: CTextTheme.greyTextTheme.headlineMedium,),
-                const SizedBox(width: cDefaultSize,),
-                Text(
-                  '2 Stops',
-                  style: CTextTheme.blackTextTheme.headlineMedium,
-                ),
+                Text('Locations Stopped', style: CTextTheme.greyTextTheme.headlineMedium),
+                const SizedBox(width: cDefaultSize),
               ],
             ),
             const SizedBox(height: 10.0),
-            const Divider(),
-            const SizedBox(height: 10.0),
             Expanded(
-              //Lists of Order Steps
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  final item = items[index];
-                  return ListTile(
+              child: Column(
+                children: [
+                  ListTile(
                     titleAlignment: ListTileTitleAlignment.top,
-                    //Step Number
                     leading: CircleAvatar(
                       backgroundColor: AppColors.cGreyColor1,
-                      child: Text('${index + 1}', style: CTextTheme.blackTextTheme.headlineMedium,),
+                      child: Text('1', style: CTextTheme.blackTextTheme.headlineMedium),
                     ),
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        //Location Title
                         Text(
-                          item['location'],
+                          job['jobType'] == 'Locker To Laundry Site'
+                              ? "${jobLocker['name']}"
+                              : "I3 Laundry Centre",
                           style: CTextTheme.blackTextTheme.headlineLarge,
                         ),
-                        //Location Address
                         Text(
-                          item['address'],
+                          job['jobType'] == 'Locker To Laundry Site'
+                              ? "${jobLocker['address']}"
+                              : "Persiaran Tasik Timur, Sunway South Quay, Bandar Sunway, 47500 Subang Jaya, Selangor",
                           style: CTextTheme.greyTextTheme.labelLarge,
                         ),
                       ],
                     ),
-                    //Navigate to Detail of Order
-                    subtitle: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => item['pageroute']),
-                        );
-                      },
-                      child: Text('See Details',style: CTextTheme.blueTextTheme.labelLarge,),
+                  ),
+                  ListTile(
+                    titleAlignment: ListTileTitleAlignment.top,
+                    leading: CircleAvatar(
+                      backgroundColor: AppColors.cGreyColor1,
+                      child: Text('2', style: CTextTheme.blackTextTheme.headlineMedium),
                     ),
-                  );
-                },
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          job['jobType'] == 'Locker To Laundry Site'
+                              ? "I3 Laundry Centre"
+                              : "${jobLocker['name']}",
+                          style: CTextTheme.blackTextTheme.headlineLarge,
+                        ),
+                        Text(
+                          job['jobType'] == 'Locker To Laundry Site'
+                              ? "Persiaran Tasik Timur, Sunway South Quay, Bandar Sunway, 47500 Subang Jaya, Selangor"
+                              : "${jobLocker['address']}",
+                          style: CTextTheme.greyTextTheme.labelLarge,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

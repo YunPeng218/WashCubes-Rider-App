@@ -73,7 +73,7 @@ class _IDVerificationScreenState extends State<IDVerificationScreen> {
                     ? NetworkImage(riderDetails['profilePicURL'])
                     : const AssetImage(cRiderPFP) as ImageProvider<Object>,
               ),
-              Text( riderDetails['name'] ?? "", style: CTextTheme.blackTextTheme.displaySmall,),
+              Text( riderDetails['name'] ?? "Loading...", style: CTextTheme.blackTextTheme.displaySmall,),
             ],
           ),
         ),  

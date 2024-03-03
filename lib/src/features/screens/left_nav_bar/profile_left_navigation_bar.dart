@@ -70,11 +70,11 @@ class _LeftNavigationBarState extends State<LeftNavigationBar> {
               },
               child: UserAccountsDrawerHeader(
                 accountName: Text(
-                  riderDetails['name'] ?? "",
+                  riderDetails['name'] ?? "Loading...",
                   style: CTextTheme.whiteTextTheme.headlineLarge,
                 ),
                 accountEmail: Text(
-                  riderDetails['email'] ?? "",
+                  riderDetails['email'] ?? "Loading...",
                   style: CTextTheme.greyTextTheme.headlineSmall,
                 ),
                 currentAccountPicture: CircleAvatar(

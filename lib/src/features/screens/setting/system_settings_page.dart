@@ -14,8 +14,6 @@ class SystemSettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SystemSettingsPage> {
-  bool autoReceiveOrder = false;
-  bool receivePickUpAlerts = true;
 
   @override
   Widget build(BuildContext context) {
@@ -29,42 +27,6 @@ class SettingsPageState extends State<SystemSettingsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Notification Category
-            Text('NOTIFICATION', style: CTextTheme.greyTextTheme.labelLarge),
-            // Auto Order Retrieval Switch Row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Auto receive order', style: CTextTheme.blackTextTheme.headlineMedium),
-                //TODO: Stand in Switch condition
-                Switch(
-                  value: autoReceiveOrder,
-                  activeColor: AppColors.cSwitchColor,
-                  onChanged: (bool value) {
-                    setState(() {
-                      autoReceiveOrder = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            // Pick Up Alert Switch Row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Receive pick up alerts', style: CTextTheme.blackTextTheme.headlineMedium),
-                Switch(
-                  value: receivePickUpAlerts,
-                  activeColor: AppColors.cSwitchColor,
-                  onChanged: (bool value) {
-                    setState(() {
-                      receivePickUpAlerts = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: cDefaultSize),
             // Account Setting Row Category
             Text('ACCOUNT SETTING', style: CTextTheme.greyTextTheme.labelLarge),
             // Reset Password
