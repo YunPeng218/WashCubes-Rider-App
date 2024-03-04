@@ -412,6 +412,7 @@ class _SitePickupDropoffState extends State<SitePickupDropoff> {
                             widget.jobType == "Site Drop Off"
                                 ? 'Confirm Drop Off'
                                 : 'Confirm Pick Up',
+                            style: CTextTheme.blackTextTheme.headlineSmall,
                           ),
                         ],
                       ),

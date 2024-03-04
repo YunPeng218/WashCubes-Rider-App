@@ -9,6 +9,8 @@ class JobDetailsPage extends StatelessWidget {
   final Map<String, dynamic> jobLocker;
 
   JobDetailsPage({required this.job, required this.jobLocker, Key? key}) : super(key: key);
+  String laundrySiteAddress =
+    'No 10 Jalan TPP 1/10 Taman Industri Puchong 47100 Petaling Selangor Darul Ehsan';
 
   String getFormattedDateTime(String dateString) {
     DateTime dateTime = DateTime.parse(dateString);
@@ -111,7 +113,7 @@ class JobDetailsPage extends StatelessWidget {
                         Text(
                           job['jobType'] == 'Locker To Laundry Site'
                               ? "${jobLocker['address']}"
-                              : "Persiaran Tasik Timur, Sunway South Quay, Bandar Sunway, 47500 Subang Jaya, Selangor",
+                              : laundrySiteAddress,
                           style: CTextTheme.greyTextTheme.labelLarge,
                         ),
                       ],
@@ -134,7 +136,7 @@ class JobDetailsPage extends StatelessWidget {
                         ),
                         Text(
                           job['jobType'] == 'Locker To Laundry Site'
-                              ? "Persiaran Tasik Timur, Sunway South Quay, Bandar Sunway, 47500 Subang Jaya, Selangor"
+                              ? laundrySiteAddress
                               : "${jobLocker['address']}",
                           style: CTextTheme.greyTextTheme.labelLarge,
                         ),

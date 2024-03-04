@@ -48,22 +48,6 @@ class SettingsPageState extends State<SystemSettingsPage> {
                 ],
               ),
             ), 
-            
-            const SizedBox(height: cDefaultSize),
-            // Delete Account Button
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Delete Account',
-                      style: CTextTheme.blackTextTheme.headlineMedium,
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),

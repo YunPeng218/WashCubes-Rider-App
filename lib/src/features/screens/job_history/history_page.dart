@@ -116,7 +116,7 @@ class _HistoryPageState extends State<HistoryPage> {
             const Divider(),
             items.isEmpty
               ? Center(
-                  child: Text('No job history', style: CTextTheme.blackTextTheme.headlineMedium),
+                  child: Text('No job history found', style: CTextTheme.blackTextTheme.headlineMedium),
                 )
               : ListView.builder(
                   shrinkWrap: true,

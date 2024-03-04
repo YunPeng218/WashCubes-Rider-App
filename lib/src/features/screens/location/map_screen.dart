@@ -39,7 +39,6 @@ class MapsPageState extends State<MapsPage> {
   List<double> laundrySiteCoordinates = [3.024181, 101.613449];
   String laundrySiteAddress =
       'No 10 Jalan TPP 1/10 Taman Industri Puchong 47100 Petaling Selangor Darul Ehsan';
-  bool statusLight = true;
 
   String? riderId;
   Job? activeJob;
@@ -810,34 +809,6 @@ class MapsPageState extends State<MapsPage> {
                       ),
                     );
                   }),
-                  //Status Switch
-                  ElevatedButton(
-                    onPressed: null,
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          AppColors.cWhiteColor),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          statusLight
-                              ? 'ONLINE'
-                              : 'OFFLINE', //If Toggled: Online, Else: Offline
-                          style: CTextTheme.blackTextTheme.headlineMedium,
-                        ),
-                        const SizedBox(width: 5),
-                        Switch(
-                          value: statusLight,
-                          activeColor: Colors.green,
-                          onChanged: (bool value) {
-                            setState(() {
-                              statusLight = value;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
               ),
             ),

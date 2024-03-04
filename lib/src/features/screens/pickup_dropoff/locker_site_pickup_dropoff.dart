@@ -530,6 +530,7 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
                           widget.jobType == "Locker Pick Up"
                               ? 'Confirm Pick Up'
                               : 'Confirm Drop Off',
+                          style: CTextTheme.blackTextTheme.headlineSmall,
                         ),
                       ],
                     ),
