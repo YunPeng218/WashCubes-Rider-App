@@ -9,7 +9,7 @@ class JobDetailsPage extends StatelessWidget {
   final Map<String, dynamic> jobLocker;
 
   JobDetailsPage({required this.job, required this.jobLocker, Key? key}) : super(key: key);
-  String laundrySiteAddress =
+  final String laundrySiteAddress =
     'No 10 Jalan TPP 1/10 Taman Industri Puchong 47100 Petaling Selangor Darul Ehsan';
 
   String getFormattedDateTime(String dateString) {

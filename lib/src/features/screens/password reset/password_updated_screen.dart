@@ -8,6 +8,10 @@ class PasswordUpdatedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.pop(context);
+    });
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(cDefaultSize),
@@ -21,11 +25,6 @@ class PasswordUpdatedScreen extends StatelessWidget {
                 style: CTextTheme.blackTextTheme.displaySmall,
                 textAlign: TextAlign.center,
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('Continue', style: CTextTheme.blackTextTheme.headlineMedium,)),
             ],
           ),
         ),
