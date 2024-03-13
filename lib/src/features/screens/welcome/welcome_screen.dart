@@ -42,14 +42,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 //Join Button
                 OutlinedButton(
-                  onPressed: () {
-                    // TODO: Head to Rider Vacancy Wedsite
-                    //For Now Go Straight to HomePage for Testing Purposes
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MapsPage()),
-                    );
-                  }, 
+                  onPressed: () {}, 
                   child: Text('Join as a Rider', style: CTextTheme.blackTextTheme.headlineMedium,),
                 ),
               ],
