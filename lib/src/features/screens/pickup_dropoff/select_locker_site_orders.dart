@@ -147,7 +147,7 @@ class LockerPickupOrderSelectState extends State<LockerPickupOrderSelect> {
                   style: CTextTheme.blackTextTheme.headlineLarge,
                 ),
                 content: Text(
-                  'Your Job Number is #$jobNumber',
+                  'Your Job Number is #$jobNumber. Please proceed to the locker site to pick up your assigned orders.',
                   textAlign: TextAlign.center,
                   style: CTextTheme.blackTextTheme.headlineSmall,
                 ),

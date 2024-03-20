@@ -424,6 +424,10 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
                         Text(
                             'Assigned Compartment: ${order.collectionSite?.compartmentNumber ?? 'Loading...'}',
                             style: CTextTheme.blueTextTheme.headlineSmall),
+                      if (widget.jobType == 'Locker Pick Up')
+                        Text(
+                            'Pickup Compartment: ${order.lockerDetails?.compartmentNumber ?? 'Loading...'}',
+                            style: CTextTheme.blueTextTheme.headlineSmall),
                       const SizedBox(height: 15.0),
                       ListTile(
                         leading: Image.asset(
