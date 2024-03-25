@@ -206,7 +206,7 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
       isUploading = true;
     });
     try {
-      final url = Uri.parse('https://api.cloudinary.com/v1_1/ddweldfmx/upload');
+      final url = Uri.parse('');
       final request = http.MultipartRequest('POST', url)
         ..fields['upload_preset'] = 'xcbbr3ok'
         ..files.add(
