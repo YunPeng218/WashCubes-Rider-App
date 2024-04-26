@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -15,7 +17,8 @@ class OTPVerifyScreen extends StatefulWidget {
   String otp;
   bool isResendButtonEnabled = false;
 
-  OTPVerifyScreen({required this.email, required this.otp, Key? key}): super(key: key);
+  OTPVerifyScreen({required this.email, required this.otp, Key? key})
+      : super(key: key);
 
   @override
   State<OTPVerifyScreen> createState() => _OTPVerifyScreenState();
@@ -60,8 +63,8 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
   void resendOTP() async {
     if (widget.isResendButtonEnabled) {
       var reqUrl = '${url}resetPassRequest';
-      var response = await http.post(Uri.parse(reqUrl),
-        body: {"email": widget.email});
+      var response =
+          await http.post(Uri.parse(reqUrl), body: {"email": widget.email});
       var jsonResponse = jsonDecode(response.body);
       setState(() {
         widget.otp = jsonResponse['otp'];
@@ -85,10 +88,8 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(
-              'Error',
-              style: CTextTheme.blackTextTheme.headlineLarge
-            ),
+            title:
+                Text('Error', style: CTextTheme.blackTextTheme.headlineLarge),
             content: Text(
               'The OTP entered is incorrect. Please try again.',
               style: CTextTheme.blackTextTheme.headlineMedium,
@@ -115,7 +116,10 @@ class _OTPVerifyScreenState extends State<OTPVerifyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Verification', style: CTextTheme.blackTextTheme.displaySmall,),
+        title: Text(
+          'Verification',
+          style: CTextTheme.blackTextTheme.displaySmall,
+        ),
         centerTitle: true,
       ),
       body: Center(

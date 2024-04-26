@@ -206,7 +206,7 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
       isUploading = true;
     });
     try {
-      final url = Uri.parse('https://api.cloudinary.com/v1_1/ddweldfmx/upload');
+      final url = Uri.parse('');
       final request = http.MultipartRequest('POST', url)
         ..fields['upload_preset'] = 'xcbbr3ok'
         ..files.add(
@@ -423,6 +423,10 @@ class _LockerPickupDropoffState extends State<LockerPickupDropoff> {
                       if (widget.jobType == 'Locker Drop Off')
                         Text(
                             'Assigned Compartment: ${order.collectionSite?.compartmentNumber ?? 'Loading...'}',
+                            style: CTextTheme.blueTextTheme.headlineSmall),
+                      if (widget.jobType == 'Locker Pick Up')
+                        Text(
+                            'Pickup Compartment: ${order.lockerDetails?.compartmentNumber ?? 'Loading...'}',
                             style: CTextTheme.blueTextTheme.headlineSmall),
                       const SizedBox(height: 15.0),
                       ListTile(

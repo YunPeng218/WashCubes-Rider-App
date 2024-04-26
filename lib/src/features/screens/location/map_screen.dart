@@ -138,7 +138,7 @@ class MapsPageState extends State<MapsPage> {
 
   Future<void> fetchLockerSites() async {
     try {
-      var reqUrl = url + 'lockers';
+      var reqUrl = '${url}lockers';
       final response = await http.get(Uri.parse(reqUrl));
 
       if (response.statusCode == 200) {
@@ -783,7 +783,7 @@ class MapsPageState extends State<MapsPage> {
                     onMapCreated: _onMapCreated,
                     initialCameraPosition: CameraPosition(
                       target: _currentLocation,
-                      zoom: 14.0,
+                      zoom: 13.0,
                     ),
                     mapType: MapType.normal,
                     markers: createMarkers(),
